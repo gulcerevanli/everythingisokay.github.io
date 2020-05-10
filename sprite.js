@@ -3,14 +3,17 @@ var sketchbook;
 let blueScreen;
 let sketchbook_page;
 
+
+let timegoes;
+
 let papers = [];
 let paper;
-
-let button;
 
 var clock;
 
 let currentImage;
+
+let sadSong;
 
 var scene1 = true;
 var scene2 = false;
@@ -19,6 +22,7 @@ var scene4 = false;
 var scene5 = false;
 var scene6 = false;
 var scene7 = false;
+var scene8 = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
@@ -26,6 +30,8 @@ var offsetX, offsetY;
 
 
 function preload() {
+
+  //timegoes = createVideo(['assets/timegoes.mov', 'assets/timegoes.webm']);
 
   blueScreen = loadImage('assets/blueScreen.png');
   ocr = loadFont('assets/OCRAStd.otf');
@@ -45,8 +51,12 @@ function preload() {
   memoryOfPhoto_5 = loadImage ('assets/5.png');
   memoryOfPhoto_5 = loadImage ('assets/6.png');
 
+  //MUSICCC
+  soundFormats('mp3','ogg');
+  sadSong = loadSound('assets/bitsadinnit.mp3');
 
-  clock = loadAnimation('assets/clock_1.png', 'assets/clock_2.png','assets/clock_3.png');
+
+  clock = loadAnimation ('assets/roomMelts_1.png', 'assets/roomMelts_2.png','assets/roomMelts_3.png', 'assets/roomMelts_4.png', 'assets/roomMelts_5.png', 'assets/roomMelts_6.png','assets/roomMelts_7.png','assets/roomMelts_8.png','assets/roomMelts_9.png','assets/roomMelts_10.png', 'assets/roomMelts_11.png','assets/roomMelts_12.png','assets/roomMelts_13.png','assets/roomMelts_14.png','assets/roomMelts_15.png', 'assets/roomMelts_16.png','assets/roomMelts_17.png','assets/roomMelts_18.png','assets/roomMelts_19.png','assets/roomMelts_20.png','assets/roomMelts_21.png','assets/roomMelts_22.png');
 
 }
 
@@ -71,20 +81,22 @@ function setup() {
 
 function draw(){
 
- if (scene1 == true) {
+ if (scene1) {
     currentScene1();
+
     if(mouseIsPressed){
         scene1 = false;
         scene3 = false;
         scene2 = true;
         currentScene2();
-    }
- }
-   if (scene2 == true) {
+      }
+}
+   if (scene2) {
      currentScene2();
      image(icon,600,850,30,30);
      if (mouseIsPressed && mouseX > 600 && mouseX<630 &&
-      mouseY>850 && mouseY <900) {
+      mouseY>850 && mouseY <900)  {
+
          scene1 = false;
          scene2 = false;
          scene3 = true;
@@ -150,6 +162,15 @@ if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
 
    }
 
+if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on photo
+       mouseY>30 && mouseY <200) {
+         scene6 = false;
+         scene4 = false;
+         scene7 = false;
+         scene8 = true;
+
+      }
+
 }
 
 if (scene7 == true) {     // CLEAN ROOM
@@ -161,7 +182,17 @@ if (scene7 == true) {     // CLEAN ROOM
 
    }
 
+   if (scene8 == true) {     // VIDEOS
+       currentScene8();
+          scene7 = false;
+          scene6 = false;
+          scene8 = true;
+
+
+      }
+
 }
+
 
  function currentScene1() {
    image(blueScreen,0,0);
@@ -169,6 +200,8 @@ if (scene7 == true) {     // CLEAN ROOM
    fill(254, 255, 0);
    text("it's been days since you've", 120, 670);
    text("drawn anything", 120, 730);
+   if(mouseIsPressed){
+   sadSong.play();}
 
 
  }
@@ -248,13 +281,22 @@ function currentScene5() {   //SKETCHBOOK + PENCIL
 }
 // EXPLORE THE ROOM
 function currentScene6() {
-
+console.log(mouseX,mouseY);
 // else if
   if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
       mouseY>90 && mouseY <168) {
         currentScene7();
         scene6 = false;
         scene5 = false;
+
+} else if (mouseIsPressed && mouseX > 56 && mouseX<200 &&  //mouse is clicked on clock
+    mouseY>30 && mouseY <195) {
+      currentScene8();
+      scene7 = false;
+      scene6 = false;
+      scene5 = false;
+      scene8 = true;
+
 }
 
    if(mouseIsPressed && mouseX > 85 && mouseX<425 &&
@@ -311,6 +353,15 @@ if (currentScene7 == true && mouseIsPressed && mouseX > 100 && mouseX<1050 &&
 
 }
 
+function currentScene8() {
+  scene7 === false;
+  console.log(mouseX,mouseY);
+  //  image (timegoes,0,0);
+    animation(clock, 600, 450);
+
+}
+
+
 function mousePressed() {                /// dragging the trash + pencil ///
    //current_image = current_image + 1;
   // Did I click on the rectangle?
@@ -324,7 +375,7 @@ function mousePressed() {                /// dragging the trash + pencil ///
 
   for (var i = 0; i < papers.length; i++) {
           //checking to see if the mouse is over the box and turning it white if it is
-          if (papers[i].paperover == true) {
+          if (papers[i].paperover) {
               papers[i].locked = true;
               print("mouse is pressed")
           } else {
