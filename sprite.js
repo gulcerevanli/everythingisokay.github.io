@@ -23,6 +23,10 @@ var scene5 = false;
 var scene6 = false;
 var scene7 = false;
 var scene8 = false;
+var scene9 = false;
+var scene10 = false;
+var scene11 = false;
+var scene12 = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
@@ -40,6 +44,7 @@ function preload() {
   paper = loadImage('assets/trashpaper.png');
   greenpaper = loadImage('assets/greenpaper.png');
   text_box = loadImage ('assets/text_box.png');
+  text_box_grey = loadImage ('assets/text_box_grey.png');
   icon = loadImage ('assets/icon.png');
   pencil = loadImage ('assets/pencil.png');
   sketchbook_page = loadImage ('assets/sketchbook_page.png');
@@ -50,6 +55,9 @@ function preload() {
   memoryOfPhoto_4 = loadImage ('assets/4.png');
   memoryOfPhoto_5 = loadImage ('assets/5.png');
   memoryOfPhoto_5 = loadImage ('assets/6.png');
+
+  panicRoom2 = loadImage ('assets/roomMelts_25.png');
+  panicRoom3 = loadImage ('assets/roomMelts_26.png');
 
   //MUSICCC
   soundFormats('mp3','ogg');
@@ -64,6 +72,11 @@ function setup() {
   createCanvas(1200,900);
   textFont(ocr);
 
+  pixelDensity(1);
+  room_clean.loadPixels();
+  loadPixels();
+
+
 
  // Starting location OF THE PENCIL
  x = 200;
@@ -76,8 +89,8 @@ function setup() {
           papers.push(new Paper(random(250), random(30, 90)));
       }
 
-}
 
+}
 
 function draw(){
 
@@ -130,7 +143,6 @@ if (scene4 == true) {
           scene5 = true;
 
    }
-
 
 if (scene5 == true) {
  currentScene5();
@@ -187,10 +199,36 @@ if (scene7 == true) {     // CLEAN ROOM
           scene7 = false;
           scene6 = false;
           scene8 = true;
-
-
       }
 
+
+if (scene9 == true) {     // text scene 1
+    currentScene9();
+       scene8 = false;
+       scene7 = false;
+       scene9 = true;
+   }
+
+
+if (scene10 == true) {     // text scene 1
+    currentScene10();
+       scene9 = false;
+       scene8 = false;
+       scene10 = true;
+   }
+
+   if (scene11 == true) {     // text scene 1
+       currentScene11();
+          scene9 = false;
+          scene8 = false;
+          scene10 = true;
+      }
+  if (scene12 == true) {     // text scene 1
+      currentScene12();
+         scene11 = false;
+         scene10 = false;
+         scene12 = true;
+         }
 }
 
 
@@ -232,10 +270,11 @@ if (scene7 == true) {     // CLEAN ROOM
 
    if ( mouseX > 800 && mouseX<970 &&
      mouseY>370 && mouseY <480) {
-       image(text_box,0,700);
+       image(text_box,0,0);
+       text_box.resize(1200,150);
        textSize(25);
        fill(0);
-       text("Your sketchbook, you need a pencil to draw on it ", 110, 800);
+       text("Your sketchbook, you need a pencil to draw on it ", 110, 95);
      }
 
 
@@ -341,25 +380,126 @@ if (currentScene7 == true && mouseIsPressed && mouseX > 100 && mouseX<1050 &&
    } else if (mouseX > 460 && mouseX<560 &&
     mouseY>0 && mouseY <60) {
     image(memoryOfPhoto_4,0,0);
-  } else if (mouseX > 585 && mouseX<685 &&
+   } else if (mouseX > 585 && mouseX<685 &&
    mouseY>0 && mouseY <60) {
    image(memoryOfPhoto_5,0,0);
- } else if (mouseX > 710 && mouseX<810 &&
-  mouseY>0 && mouseY <60) {
-  image(memoryOfPhoto_6,0,0);
-  text("and you took a picture of them.", 100, 700);
+   } else if (mouseX > 710 && mouseX<810 &&
+    mouseY>0 && mouseY <60) {
+    image(memoryOfPhoto_6,0,0);
+    text("and you took a picture of them.", 100, 700);
 
 }
 
 }
 
-function currentScene8() {
+function currentScene8() { //TIME GOES
   scene7 === false;
   console.log(mouseX,mouseY);
+  textSize(25);
+  fill(0);
   //  image (timegoes,0,0);
-    animation(clock, 600, 450);
 
+  //TIME GOES ANIMATION
+
+      clock.goToFrame(clock.getLastFrame());
+      animation(clock, 600, 450);
+      textSize(25);
+      fill(0);
+      image(text_box_grey,0,700);
+      text_box_grey.resize(650,300);
+      text("Time goes by so fast and you ",60, 800);
+      text("start panicking all of a sudden. ", 60, 850);
+
+      image(icon,1000,800,30,30);
+      if (mouseIsPressed && mouseX > 1000 && mouseX<1050 &&
+           mouseY>800 && mouseY <850) {
+          currentScene9();
 }
+}
+
+function currentScene9() {   // PANIC_1
+    scene8 === false;
+  image(panicRoom2, 0,0, 1200,900);
+  textSize(25);
+  fill(0);
+  image(text_box_grey,0,700);
+  text_box_grey.resize(650,300);
+  text("Everything loses its color and you feel  ",60, 800);
+  text("as if you're being swallowed by darkness. ", 60, 850);
+  image(icon,1000,800,30,30);
+  if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+   mouseY>750 && mouseY <850) {
+     currentScene10();
+     scene9 = false;
+     scene10 = true;
+
+  }
+}
+
+function currentScene10() {   // PANIC_2
+    scene9 === false;
+  image(panicRoom2, 0,0, 1200,900);
+  textSize(25);
+  fill(0);
+  image(text_box_grey,0,700);
+  text_box_grey.resize(850,300);
+  text("Everything loses its color and you feel  ",60, 800);
+  text("as if you're being swallowed by darkness. ", 60, 850);
+  image(icon,1000,600,30,30);
+  if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+   mouseY>550 && mouseY <750) {
+     currentScene11();
+     scene10 = false;
+     scene11 = true;
+  }
+}
+
+function currentScene11() {    // PANIC 3
+  scene10 === false;
+image(panicRoom3, 0,0, 1200,900);
+textSize(25);
+fill(0);
+image(text_box_grey,0,700);
+text_box_grey.resize(650,600);
+text("... ",60, 700);
+text("... ",60, 750);
+image(icon,1000,800,30,30);
+if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+ mouseY>750 && mouseY <850) {
+   currentScene12();
+   scene11 = false;
+   scene12 = true;
+}
+  }
+
+  function currentScene12() {
+    scene11 === false;   //lantern + search the room
+    for (let x = 0; x < room_clean.width; x++) {
+    for (let y = 0; y < room_clean.height; y++) {
+      // Calculate the 1D location from a 2D grid
+      let loc = (x + y * room_clean.width) * 4;
+      // Get the R,G,B values from image
+      let r, g, b;
+      r = room_clean.pixels[loc];
+      // Calculate an amount to change brightness based on proximity to the mouse
+      let maxdist = 50;
+      let d = dist(x, y, mouseX, mouseY);
+      let adjustbrightness = (255 * (maxdist - d)) / maxdist;
+      r += adjustbrightness;
+      // Constrain RGB to make sure they are within 0-255 color range
+      r = constrain(r, 0, 255);
+      // Make a new color and set pixel in the window
+      //color c = color(r, g, b);
+      let pixloc = (y * width + x) * 4;
+      pixels[pixloc] = r;
+      pixels[pixloc + 1] = r;
+      pixels[pixloc + 2] = r;
+      pixels[pixloc + 3] = 255;
+    }
+  }
+  updatePixels();
+}
+
 
 
 function mousePressed() {                /// dragging the trash + pencil ///
