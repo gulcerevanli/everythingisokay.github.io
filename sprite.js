@@ -1,3 +1,9 @@
+//https://forum.processing.org/two/discussion/19190/click-and-drag-with-arrays-of-objects
+//https://p5js.org/examples/color-brightness.html
+
+
+
+
 var room_clean;
 var sketchbook;
 let blueScreen;
@@ -14,6 +20,8 @@ var clock;
 let currentImage;
 
 let sadSong;
+let hopeSong;
+
 
 var scene1 = true;
 var scene2 = false;
@@ -27,6 +35,7 @@ var scene9 = false;
 var scene10 = false;
 var scene11 = false;
 var scene12 = false;
+var scene13 = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
@@ -48,6 +57,7 @@ function preload() {
   icon = loadImage ('assets/icon.png');
   pencil = loadImage ('assets/pencil.png');
   sketchbook_page = loadImage ('assets/sketchbook_page.png');
+  note = loadImage ('assets/note.png');
 
   memoryOfPhoto_1 = loadImage ('assets/1.png');
   memoryOfPhoto_2 = loadImage ('assets/2.png');
@@ -62,9 +72,12 @@ function preload() {
   //MUSICCC
   soundFormats('mp3','ogg');
   sadSong = loadSound('assets/bitsadinnit.mp3');
+  hopeSong = loadSound('assets/itsokay.mp3');
 
 
   clock = loadAnimation ('assets/roomMelts_1.png', 'assets/roomMelts_2.png','assets/roomMelts_3.png', 'assets/roomMelts_4.png', 'assets/roomMelts_5.png', 'assets/roomMelts_6.png','assets/roomMelts_7.png','assets/roomMelts_8.png','assets/roomMelts_9.png','assets/roomMelts_10.png', 'assets/roomMelts_11.png','assets/roomMelts_12.png','assets/roomMelts_13.png','assets/roomMelts_14.png','assets/roomMelts_15.png', 'assets/roomMelts_16.png','assets/roomMelts_17.png','assets/roomMelts_18.png','assets/roomMelts_19.png','assets/roomMelts_20.png','assets/roomMelts_21.png','assets/roomMelts_22.png');
+
+  sketchbook = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png','assets/sketchbook_4.png','assets/sketchbook_5.png');
 
 }
 
@@ -94,7 +107,7 @@ function setup() {
 
 function draw(){
 
- if (scene1) {
+ if (scene1) {                      // it's been days since you've...
     currentScene1();
 
     if(mouseIsPressed){
@@ -104,7 +117,7 @@ function draw(){
         currentScene2();
       }
 }
-   if (scene2) {
+   if (scene2) {                      // creativity usually come
      currentScene2();
      image(icon,600,850,30,30);
      if (mouseIsPressed && mouseX > 600 && mouseX<630 &&
@@ -116,7 +129,7 @@ function draw(){
          currentScene3();
     }
 }
-if (scene3 == true) {
+if (scene3 == true) {                    // what to do?
    currentScene3();
    image(icon,1000,800,30,30);
    if (mouseIsPressed && mouseX > 1000 && mouseX<1050 &&
@@ -127,25 +140,26 @@ if (scene3 == true) {
        currentScene4();
    }
 }
-if (scene4 == true) {
+if (scene4 == true) {                     //room with papers on the floor
  currentScene4();
+ scene3 = false;
+ scene4 = true;
 
   for (var i = 0; i < papers.length; i++) {
   papers[i].show();
-
-       scene3 = false;
-       scene4 = true;
        }
-   }
+
       if (mouseIsPressed && mouseX > 800 && mouseX<970 &&
         mouseY>370 && mouseY <480) {
           scene4 = false;
           scene5 = true;
 
    }
+ }
 
-if (scene5 == true) {
+if (scene5 == true) {                    //sketchbook
  currentScene5();
+       scene2 = false;
        scene3 = false;
        scene4 = false;
    image(icon,1000,800,30,30);
@@ -154,7 +168,7 @@ if (scene5 == true) {
            scene5 = false;
            scene4 = false;
            scene6 = true;
-           currentScene4();
+           currentScene6();
     console.log(mouseX,mouseY);
 
    }
@@ -174,7 +188,7 @@ if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
 
    }
 
-if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on photo
+if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on clock
        mouseY>30 && mouseY <200) {
          scene6 = false;
          scene4 = false;
@@ -185,7 +199,7 @@ if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on photo
 
 }
 
-if (scene7 == true) {     // CLEAN ROOM
+if (scene7 == true) {     // memory of photo starts
     currentScene7();
        scene5 = false;
        scene6 = false;
@@ -202,7 +216,7 @@ if (scene7 == true) {     // CLEAN ROOM
       }
 
 
-if (scene9 == true) {     // text scene 1
+if (scene9 == true) {     // panic scene 1
     currentScene9();
        scene8 = false;
        scene7 = false;
@@ -210,25 +224,31 @@ if (scene9 == true) {     // text scene 1
    }
 
 
-if (scene10 == true) {     // text scene 1
+if (scene10 == true) {     // panic scene 2
     currentScene10();
        scene9 = false;
        scene8 = false;
        scene10 = true;
    }
 
-   if (scene11 == true) {     // text scene 1
+   if (scene11 == true) {     // panic scene 3
        currentScene11();
           scene9 = false;
           scene8 = false;
           scene10 = true;
       }
-  if (scene12 == true) {     // text scene 1
+  if (scene12 == true) {     // dark room
       currentScene12();
          scene11 = false;
          scene10 = false;
          scene12 = true;
          }
+ if (scene13 == true) {     // room again
+      currentScene13();
+        scene12 = false;
+        scene11 = false;
+        scene13 = true;
+      }
 }
 
 
@@ -285,7 +305,7 @@ if (scene10 == true) {     // text scene 1
     rollover = false;
   }
 
-  // Adjust location if being dragged
+  // Adjust location if being dragged    //the pencil
   if (dragging) {
     x = mouseX + offsetX;
     y = mouseY + offsetY;
@@ -303,7 +323,8 @@ if (scene10 == true) {     // text scene 1
  }
 
 
-function currentScene5() {   //SKETCHBOOK + PENCIL
+function currentScene5() {   //SKETCHBOOK + PENCIL          //the pencil thingy doesnt work also can'T go back??
+
   image(sketchbook_page, 0,0, 1200,900);
   textSize(25);
   fill(0);
@@ -320,7 +341,11 @@ function currentScene5() {   //SKETCHBOOK + PENCIL
 }
 // EXPLORE THE ROOM
 function currentScene6() {
+
+   image(room_clean,0,0);
+   image(sketchbook,800,370);
 console.log(mouseX,mouseY);
+scene5 === false;
 // else if
   if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
       mouseY>90 && mouseY <168) {
@@ -338,7 +363,7 @@ console.log(mouseX,mouseY);
 
 }
 
-   if(mouseIsPressed && mouseX > 85 && mouseX<425 &&
+   if(mouseIsPressed && mouseX > 85 && mouseX<425 &&      //mouse is clicked on the posters
    mouseY>40 && mouseY <420) {
       image(text_box,0,700);
       textSize(25);
@@ -349,7 +374,7 @@ console.log(mouseX,mouseY);
       image(text_box,0,700);
       textSize(25);
       fill(0);
-      text("Your laptop. You usually use it to watch videos. ", 110, 800);
+      text("Your laptop. You usually use it to watch videos. ", 110, 800);                //mouse is clicked on the laptop
 }
 }
 
@@ -363,14 +388,12 @@ function currentScene7() {
   text("Looking at this photograph, you ", 110, 600);
   text("remembered a happy memory of that day. ", 100, 700);
 
-if (currentScene7 == true && mouseIsPressed && mouseX > 100 && mouseX<1050 &&
-     mouseY>800 && mouseY <850) {
-        scene7 = false;
-        scene5 = false;
-        scene6 = true;
-        currentScene6();
 
-} else if (mouseX > 200 && mouseX<300 &&
+  image(icon,1000,800,30,30);
+
+
+
+   if (mouseX > 200 && mouseX<300 &&                //memory of the photo,, you have to hover on the timeline to view all
    mouseY>0 && mouseY <60) {
      image(memoryOfPhoto_2,0,0);
       text("Your friend brought a new camera. ", 100, 700);
@@ -387,12 +410,18 @@ if (currentScene7 == true && mouseIsPressed && mouseX > 100 && mouseX<1050 &&
     mouseY>0 && mouseY <60) {
     image(memoryOfPhoto_6,0,0);
     text("and you took a picture of them.", 100, 700);
+  } else if (currentScene7 == true && mouseIsPressed && mouseX > 100 && mouseX<1050 &&
+       mouseY>800 && mouseY <850) {
+          scene7 = false;
+          scene5 = false;
+          scene6 = true;
+          currentScene6();
 
 }
 
 }
 
-function currentScene8() { //TIME GOES
+function currentScene8() {                     //TIME GOES
   scene7 === false;
   console.log(mouseX,mouseY);
   textSize(25);
@@ -473,16 +502,21 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
   }
 
   function currentScene12() {
-    scene11 === false;   //lantern + search the room
+    scene11 === false;   //lantern + search the room        //how can i make one part of it colorful
+    console.log(mouseX,mouseY);
+    image(note,990,220);
+
+
     for (let x = 0; x < room_clean.width; x++) {
     for (let y = 0; y < room_clean.height; y++) {
       // Calculate the 1D location from a 2D grid
       let loc = (x + y * room_clean.width) * 4;
       // Get the R,G,B values from image
+
       let r, g, b;
       r = room_clean.pixels[loc];
       // Calculate an amount to change brightness based on proximity to the mouse
-      let maxdist = 50;
+      let maxdist =100;
       let d = dist(x, y, mouseX, mouseY);
       let adjustbrightness = (255 * (maxdist - d)) / maxdist;
       r += adjustbrightness;
@@ -495,11 +529,25 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
       pixels[pixloc + 1] = r;
       pixels[pixloc + 2] = r;
       pixels[pixloc + 3] = 255;
+
     }
   }
   updatePixels();
-}
 
+  if (mouseIsPressed && mouseX > 820 && mouseX<875 &&
+   mouseY>180 && mouseY <230) {
+     currentScene13();
+     scene12 = false;
+     scene13 = true;
+
+}
+}
+  function currentScene13() {
+    image(room_clean,0,0);
+    image(sketchbook,800,370);
+    if(mouseIsPressed){
+    hopeSong.play();}
+  }
 
 
 function mousePressed() {                /// dragging the trash + pencil ///
@@ -544,7 +592,7 @@ function mouseDragged () {
     }
 }
 
-function mouseReleased() {
+function mouseReleased() {                  //new location of the papers
   // Quit dragging
   for (var i = 0; i < papers.length; i++) {
         papers[i].locked = false;
