@@ -32,7 +32,6 @@ let papers = [];
 let paper;
 
 var clock;
-var memoryOfPhoto;
 
 let currentImage;
 
@@ -51,15 +50,16 @@ var scene10 = false;
 var scene11 = false;
 var scene12 = false;
 var scene13 = false;
+var scene14 = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
 
 var puzzle;
 var photo_memory;
-
-
-
+var memoryOfPhoto;
+var bacc;
+var pinkRect;
 
 
 function preload() {
@@ -85,6 +85,8 @@ function preload() {
   memoryOfPhoto_5 = loadImage ('assets/5.png');
   memoryOfPhoto_5 = loadImage ('assets/6.png');
   photo_memory = loadImage('assets/memory_of_photo.png');
+  bacc = loadImage('assets/light_blue_background.png');
+  pinkRect = loadImage ('assets/rectangle_pink.png');
 
   panicRoom2 = loadImage ('assets/roomMelts_25.png');
   panicRoom3 = loadImage ('assets/roomMelts_26.png');
@@ -105,7 +107,7 @@ function setup() {
 
   var x0 = 600 - photo_memory.width / 2;
   var y0 = 450 - photo_memory.height / 2;
-  puzzle = new Puzzle(x0, y0, photo_memory, 3);
+  puzzle = new Puzzle(x0, y0, photo_memory, 2);
 
   pixelDensity(1);
   room_clean.loadPixels();
@@ -226,7 +228,13 @@ if (scene7 == true) {     // CLEAN ROOM
        scene6 = false;
        scene7 = true;
 
-
+       if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+        mouseY>750 && mouseY <850) {
+               scene7 = false;
+               scene5 = false;
+               scene6 = true;
+               currentScene6();
+       }
    }
 
    if (scene8 == true) {     // time goes animation plays
@@ -264,12 +272,30 @@ if (scene10 == true) {     // text scene 2
          scene10 = false;
          scene12 = true;
          }
+
    if (scene13 == true) {     // scene after the darkness
        currentScene13();
-        scene12 = false;
-        scene11 = false;
-        scene13 = true;
+       scene12 === false;
+       scene11 === false;
+       scene13 === true;
+
+       if (mouseIsPressed && mouseX > 800 && mouseX<970 &&
+         mouseY>370 && mouseY <480) {
+               scene13 = false;
+               scene12 = false;
+               scene14 = true;
+               currentScene14();
+       }
+
       }
+
+    if ( scene14 == true) {     // final sketcbook scene
+        currentScene14();
+        scene13 === false;
+        scene12 === false;
+        scene14 === true;
+
+     }
 }
 
 
@@ -361,7 +387,6 @@ function currentScene5() {   //SKETCHBOOK + PENCIL
 }
 // EXPLORE THE ROOM
 function currentScene6() {
-
   image(room_clean,0,0);
   image(sketchbook,800,370);
 console.log(mouseX,mouseY);
@@ -400,21 +425,20 @@ console.log(mouseX,mouseY);
 function currentScene7() {
 
   clear();
+  image(bacc,0,0);
   puzzle.draw();
 
-  textSize(25);
+  image(pinkRect,1000,800,60,30);
+  textSize(12);
   fill(0);
-  text("Looking at this photograph, you ", 110, 600);
-  text("remembered a happy memory of that day. ", 100, 700);
+  text("Go Back ", 1000, 820);
 
-if (currentScene7 == true && mouseIsPressed && mouseX > 100 && mouseX<1050 &&
-     mouseY>800 && mouseY <850) {
+if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+ mouseY>750 && mouseY <850) {
         scene7 = false;
         scene5 = false;
         scene6 = true;
         currentScene6();
-
-
 }
 }
 
@@ -490,6 +514,7 @@ text_box_grey.resize(650,600);
 text("... ",60, 700);
 text("... ",60, 750);
 image(icon,1000,800,30,30);
+
 if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
  mouseY>750 && mouseY <850) {
    currentScene12();
@@ -499,7 +524,7 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
   }
 
   function currentScene12() {
-    console.log(mouseX,mouseY);
+
     scene11 === false;                                                  //lantern + search the room       not'U nasıl renkli yapabilrim
     for (let x = 0; x < room_clean.width; x++) {
     for (let y = 0; y < room_clean.height; y++) {
@@ -537,14 +562,42 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
         scene12 === false;
         image(room_clean,0,0);
         image(sketchbook,800,370);
-        happySong.play();
 
+        if (mouseIsPressed && mouseX > 800 && mouseX<970 &&
+          mouseY>370 && mouseY <480) {
+            currentScene14();
+            scene13 === false;
+            scene14 === true;
+   }
+}
+
+function currentScene14() {          // sketchbook final scene
+      scene13 === false;
+      image(sketchbook_page,0,0);
+      c = map(mouseX,0,width,0,360)
+      strokeWeight(0);
+      for (var x = 0;x<width;x = x + 1){
+          fill(x/360 * 360, 100, 100);
+        	rect(x, height - 30, 30,30)
+        	}
+  strokeWeight(2);
+  if(mouseIsPressed){
+  	//stroke(c,75,100)
+   line(mouseX,mouseY,pmouseX,pmouseY)
+  	}
 }
 
 function mousePressed() {                /// dragging the trash + pencil ///
 
 if(scene7 === true) {
   puzzle.mousePressed(mouseX, mouseY);
+}
+
+if(scene14 === true) {
+  if((mouseX > 0) && (mouseX < width) && (mouseY > height - 30) && (mouseY < height)){
+      stroke(c,75,100)
+		}
+  //happySong.play();
 }
 
    //current_image = current_image + 1;
@@ -581,6 +634,7 @@ function mouseDragged () {
   if(scene7 === true) {
     puzzle.mouseDragged(mouseX, mouseY);
   }
+
 
   for (var i = 0; i < papers.length; i++) {
           if (papers[i].locked) {
@@ -652,10 +706,12 @@ var Piece = (function() {
         this.width = img.width;
         this.height = img.height;
     }
-    Piece.prototype.draw = function() {
+
+  Piece.prototype.draw = function() {
         image(this.img, this.pos.x, this.pos.y);
     };
-    Piece.prototype.hits = function(hitpos) {
+   //Set the result of  hit
+  Piece.prototype.hits = function(hitpos) {
         if (hitpos.x > this.pos.x &&
             hitpos.x < this.pos.x + this.width &&
             hitpos.y > this.pos.y &&
@@ -682,7 +738,8 @@ var Puzzle = (function() {
         this.h = this.height / side;
         this.placePieces();
     }
-    Puzzle.prototype.placePieces = function() {
+
+  Puzzle.prototype.placePieces = function() {
         for (var y = 0; y < this.side; y++) {
             for (var x = 0; x < this.side; x++) {
                 var img = createImage(this.w, this.h);
@@ -693,12 +750,14 @@ var Puzzle = (function() {
             }
         }
     };
+  // random place of pieces
     Puzzle.prototype.randomPos = function(marginRight, marginBottom) {
-        return createVector(random(0, windowWidth - marginRight), random(0, windowHeight - marginBottom));
+        return createVector(random(0, 1200 - marginRight), random(0, 900 - marginBottom));
     };
     Puzzle.prototype.draw = function() {
-        rect(this.x - 1, this.y - 1, this.width + 1, this.height + 1);
         noFill();
+        rect(this.x - 1, this.y - 1, this.width + 1, this.height + 1);
+
         this.pieces.forEach(function(r) {
             return r.draw();
         });
@@ -766,6 +825,7 @@ var Puzzle = (function() {
     Puzzle.prototype.isInsideFrame = function(actualPos, frameStart, frameEnd, d) {
         return actualPos > frameStart - d && actualPos < frameEnd + d;
     };
+  // to check and show the number of right place
     Puzzle.prototype.checkEndGame = function() {
         var _this = this;
         var nrCorrectNeeded = this.side * this.side;
@@ -777,9 +837,13 @@ var Puzzle = (function() {
                 nrCorrect += 1;
             }
         });
-        if (nrCorrect === nrCorrectNeeded) {
-            //println('hey,Good Job!');
+        //when you complete the puzzle,it show well done,and when you put the piece in the correct place it show right place in the ensole
+			if (nrCorrect === nrCorrectNeeded) {
+            var h1 = createElement("h1", "Well Done!");
             this.canPlay = false;
+        } else {
+
+          console.log("Right places: " + nrCorrect);
         }
     };
     return Puzzle;
