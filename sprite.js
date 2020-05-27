@@ -1,3 +1,25 @@
+/*
+
+EVERYTHING IS OKAY
+@gulcerevanli
+
+vcds4102 Graduation Project
+
+a short game
+
+#todo
+1 -intro screens play button should be placed on the same spot, avoid multiple
+mousepress
+2 -check papers interaction
+3 -fix the puzzle, it should be on a timeline
+4 -add more memories
+5 -credit the codes I used
+
+
+last update: May 26, Thu
+
+*/
+
 var room_clean;
 var sketchbook;
 let blueScreen;
@@ -10,6 +32,7 @@ let papers = [];
 let paper;
 
 var clock;
+var memoryOfPhoto;
 
 let currentImage;
 
@@ -31,6 +54,11 @@ var scene13 = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
+
+var puzzle;
+var photo_memory;
+
+
 
 
 
@@ -56,6 +84,7 @@ function preload() {
   memoryOfPhoto_4 = loadImage ('assets/4.png');
   memoryOfPhoto_5 = loadImage ('assets/5.png');
   memoryOfPhoto_5 = loadImage ('assets/6.png');
+  photo_memory = loadImage('assets/memory_of_photo.png');
 
   panicRoom2 = loadImage ('assets/roomMelts_25.png');
   panicRoom3 = loadImage ('assets/roomMelts_26.png');
@@ -66,12 +95,17 @@ function preload() {
   happySong = loadSound('assets/itsokay.mp3');
 
   clock = loadAnimation ('assets/roomMelts_1.png', 'assets/roomMelts_2.png','assets/roomMelts_3.png', 'assets/roomMelts_4.png', 'assets/roomMelts_5.png', 'assets/roomMelts_6.png','assets/roomMelts_7.png','assets/roomMelts_8.png','assets/roomMelts_9.png','assets/roomMelts_10.png', 'assets/roomMelts_11.png','assets/roomMelts_12.png','assets/roomMelts_13.png','assets/roomMelts_14.png','assets/roomMelts_15.png', 'assets/roomMelts_16.png','assets/roomMelts_17.png','assets/roomMelts_18.png','assets/roomMelts_19.png','assets/roomMelts_20.png','assets/roomMelts_21.png','assets/roomMelts_22.png');
-  //sketchbook = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png', 'assets/sketchbook_4.png', 'assets/sketchbook_5.png',);
+  //sketchbook = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png', 'assets/sketchbook_4.png', 'assets/sketchbook_5.png',)
+  memoryOfPhoto = loadAnimation ('assets/1.png','assets/2.png','assets/3.png','assets/4.png','assets/5.png','assets/6.png');
 }
 
 function setup() {
   createCanvas(1200,900);
   textFont(ocr);
+
+  var x0 = 600 - photo_memory.width / 2;
+  var y0 = 450 - photo_memory.height / 2;
+  puzzle = new Puzzle(x0, y0, photo_memory, 3);
 
   pixelDensity(1);
   room_clean.loadPixels();
@@ -364,9 +398,9 @@ console.log(mouseX,mouseY);
 }
 
 function currentScene7() {
-  console.log(mouseX,mouseY);
 
-  image (memoryOfPhoto_1,0,0);
+  clear();
+  puzzle.draw();
 
   textSize(25);
   fill(0);
@@ -380,26 +414,8 @@ if (currentScene7 == true && mouseIsPressed && mouseX > 100 && mouseX<1050 &&
         scene6 = true;
         currentScene6();
 
-} else if (mouseX > 200 && mouseX<300 &&
-   mouseY>0 && mouseY <60) {
-     image(memoryOfPhoto_2,0,0);
-      text("Your friend brought a new camera. ", 100, 700);
-   } else if (mouseX > 330 && mouseX<430 &&
-    mouseY>0 && mouseY <60) {
-      image(memoryOfPhoto_3,0,0);
-   } else if (mouseX > 460 && mouseX<560 &&
-    mouseY>0 && mouseY <60) {
-    image(memoryOfPhoto_4,0,0);
-   } else if (mouseX > 585 && mouseX<685 &&
-   mouseY>0 && mouseY <60) {
-   image(memoryOfPhoto_5,0,0);
-   } else if (mouseX > 710 && mouseX<810 &&
-    mouseY>0 && mouseY <60) {
-    image(memoryOfPhoto_6,0,0);
-    text("and you took a picture of them.", 100, 700);
 
 }
-
 }
 
 function currentScene8() { //TIME GOES
@@ -521,11 +537,16 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
         scene12 === false;
         image(room_clean,0,0);
         image(sketchbook,800,370);
-        happySong.play();}
+        happySong.play();
 
 }
 
 function mousePressed() {                /// dragging the trash + pencil ///
+
+if(scene7 === true) {
+  puzzle.mousePressed(mouseX, mouseY);
+}
+
    //current_image = current_image + 1;
   // Did I click on the rectangle?
   if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
@@ -557,6 +578,10 @@ function mousePressed() {                /// dragging the trash + pencil ///
 
 function mouseDragged () {
 
+  if(scene7 === true) {
+    puzzle.mouseDragged(mouseX, mouseY);
+  }
+
   for (var i = 0; i < papers.length; i++) {
           if (papers[i].locked) {
               papers[i].xpos = mouseX - papers[i].xoffset;
@@ -568,6 +593,11 @@ function mouseDragged () {
 }
 
 function mouseReleased() {
+
+  if(scene7 === true) {
+    puzzle.mouseReleased();
+  }
+
   // Quit dragging
   for (var i = 0; i < papers.length; i++) {
         papers[i].locked = false;
@@ -613,3 +643,144 @@ function Paper(tempColor, tempSize) {
 
     };
 }
+
+var Piece = (function() {
+    function Piece(pos, img, i) {
+        this.pos = pos;
+        this.img = img;
+        this.i = i;
+        this.width = img.width;
+        this.height = img.height;
+    }
+    Piece.prototype.draw = function() {
+        image(this.img, this.pos.x, this.pos.y);
+    };
+    Piece.prototype.hits = function(hitpos) {
+        if (hitpos.x > this.pos.x &&
+            hitpos.x < this.pos.x + this.width &&
+            hitpos.y > this.pos.y &&
+            hitpos.y < this.pos.y + this.height) {
+            return true;
+        }
+        return false;
+    };
+    return Piece;
+}());
+
+var Puzzle = (function() {
+    function Puzzle(x, y, img, side) {
+        this.x = x;
+        this.y = y;
+        this.img = img;
+        this.side = side;
+        this.isDragging = false;
+        this.canPlay = true;
+        this.pieces = [];
+        this.width = img.width;
+        this.height = img.height;
+        this.w = this.width / side;
+        this.h = this.height / side;
+        this.placePieces();
+    }
+    Puzzle.prototype.placePieces = function() {
+        for (var y = 0; y < this.side; y++) {
+            for (var x = 0; x < this.side; x++) {
+                var img = createImage(this.w, this.h);
+                img.copy(this.img, this.w * x, this.h * y, this.w, this.h, 0, 0, this.w, this.h);
+                var pos = this.randomPos(this.w, this.h);
+                var index = x + y * this.side;
+                this.pieces.push(new Piece(pos, img, index));
+            }
+        }
+    };
+    Puzzle.prototype.randomPos = function(marginRight, marginBottom) {
+        return createVector(random(0, windowWidth - marginRight), random(0, windowHeight - marginBottom));
+    };
+    Puzzle.prototype.draw = function() {
+        rect(this.x - 1, this.y - 1, this.width + 1, this.height + 1);
+        noFill();
+        this.pieces.forEach(function(r) {
+            return r.draw();
+        });
+    };
+    Puzzle.prototype.mousePressed = function(x, y) {
+        var _this = this;
+        if (this.canPlay) {
+            var m_1 = createVector(x, y);
+            var index_1;
+            this.pieces.forEach(function(p, i) {
+                if (p.hits(m_1)) {
+                    _this.clickOffset = p5.Vector.sub(p.pos, m_1);
+                    _this.isDragging = true;
+                    _this.dragPiece = p;
+                    index_1 = i;
+                }
+            });
+            if (this.isDragging) {
+                this.putOnTop(index_1);
+            }
+        }
+    };
+    Puzzle.prototype.mouseDragged = function(x, y) {
+        if (this.isDragging) {
+            var m = createVector(x, y);
+            this.dragPiece.pos.set(m).add(this.clickOffset);
+        }
+    };
+    Puzzle.prototype.mouseReleased = function() {
+        if (this.isDragging) {
+            this.isDragging = false;
+            this.snapTo(this.dragPiece);
+            this.checkEndGame();
+        }
+    };
+    Puzzle.prototype.putOnTop = function(index) {
+        this.pieces.splice(index, 1);
+        this.pieces.push(this.dragPiece);
+    };
+    Puzzle.prototype.snapTo = function(p) {
+        var dx = this.w / 2;
+        var dy = this.h / 2;
+        var x2 = this.x + this.width;
+        var y2 = this.y + this.height;
+        for (var y = this.y; y < y2; y += this.h) {
+            for (var x = this.x; x < x2; x += this.w) {
+                if (this.shouldSnapToX(p, x, dx, dy, y2)) {
+                    p.pos.x = x;
+                }
+                if (this.shouldSnapToY(p, y, dx, dy, x2)) {
+                    p.pos.y = y;
+                }
+            }
+        }
+    };
+    Puzzle.prototype.shouldSnapToX = function(p, x, dx, dy, y2) {
+        return this.isOnGrid(p.pos.x, x, dx) && this.isInsideFrame(p.pos.y, this.y, y2 - this.h, dy);
+    };
+    Puzzle.prototype.shouldSnapToY = function(p, y, dx, dy, x2) {
+        return this.isOnGrid(p.pos.y, y, dy) && this.isInsideFrame(p.pos.x, this.x, x2 - this.w, dx);
+    };
+    Puzzle.prototype.isOnGrid = function(actualPos, gridPos, d) {
+        return actualPos > gridPos - d && actualPos < gridPos + d;
+    };
+    Puzzle.prototype.isInsideFrame = function(actualPos, frameStart, frameEnd, d) {
+        return actualPos > frameStart - d && actualPos < frameEnd + d;
+    };
+    Puzzle.prototype.checkEndGame = function() {
+        var _this = this;
+        var nrCorrectNeeded = this.side * this.side;
+        var nrCorrect = 0;
+        this.pieces.forEach(function(p) {
+            var correctIndex = p.i;
+            var actualIndex = (p.pos.x - _this.x) / _this.w + (p.pos.y - _this.y) / _this.h * _this.side;
+            if (actualIndex === correctIndex) {
+                nrCorrect += 1;
+            }
+        });
+        if (nrCorrect === nrCorrectNeeded) {
+            //println('hey,Good Job!');
+            this.canPlay = false;
+        }
+    };
+    return Puzzle;
+}());
