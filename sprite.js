@@ -24,9 +24,11 @@ var room_clean;
 var sketchbook;
 let blueScreen;
 let sketchbook_page;
-
+var room_panic_mode;
+var noteSavesU;
 
 let timegoes;
+let timer = 10;
 
 let papers = [];
 let paper;
@@ -90,7 +92,8 @@ function preload() {
 
   panicRoom2 = loadImage ('assets/roomMelts_25.png');
   panicRoom3 = loadImage ('assets/roomMelts_26.png');
-
+  room_panic_mode = loadImage('assets/room_panic_mode.png')
+  noteSavesU = loadImage ('assets/noten.png')
   //MUSICCC
   soundFormats('mp3','ogg');
   sadSong = loadSound('assets/bitsadinnit.mp3');
@@ -103,6 +106,7 @@ function preload() {
 
 function setup() {
   createCanvas(1200,900);
+  background(sketchbook_page,0,0);
   textFont(ocr);
 
   var x0 = 600 - photo_memory.width / 2;
@@ -110,7 +114,7 @@ function setup() {
   puzzle = new Puzzle(x0, y0, photo_memory, 2);
 
   pixelDensity(1);
-  room_clean.loadPixels();
+  room_panic_mode.loadPixels();
   loadPixels();
 
 
@@ -173,13 +177,14 @@ if (scene4 == true) {
        scene3 = false;
        scene4 = true;
        }
-   }
+
       if (mouseIsPressed && mouseX > 800 && mouseX<970 &&
         mouseY>370 && mouseY <480) {
           scene4 = false;
           scene5 = true;
 
    }
+ }
 
 if (scene5 == true) {
  currentScene5();
@@ -334,15 +339,13 @@ if (scene10 == true) {     // text scene 2
 
    image(room_clean,0,0);
    image(sketchbook,800,370);
+   console.log(mouseX,mouseY);
 
-   if ( mouseX > 800 && mouseX<970 &&
-     mouseY>370 && mouseY <480) {
-       image(text_box,0,0);
-       text_box.resize(1200,150);
-       textSize(25);
+       image(text_box,0,-10);
+       text_box.resize(780,70);
+       textSize(17);
        fill(0);
-       text("Your sketchbook, you need a pencil to draw on it ", 110, 95);
-     }
+       text("To use your sketchbook, you need a pencil to draw on it. ", 50, 35);
 
 
    if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
@@ -387,8 +390,28 @@ function currentScene5() {   //SKETCHBOOK + PENCIL
 }
 // EXPLORE THE ROOM
 function currentScene6() {
+
+  if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+     timer --;
+   }
+
+  if (timer == 0) {
+    currentScene8();
+    scene7 = false;
+    scene6 = false;
+    scene5 = false;
+    scene8 = true;
+
+}
+
   image(room_clean,0,0);
   image(sketchbook,800,370);
+         image(text_box,0,-10);
+         text_box.resize(780,70);
+         textSize(17);
+         fill(0);
+         text("To get inspired, explore the room. ", 50, 35);
+
 console.log(mouseX,mouseY);
 // else if
   if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
@@ -409,16 +432,16 @@ console.log(mouseX,mouseY);
 
    if(mouseIsPressed && mouseX > 85 && mouseX<425 &&
    mouseY>40 && mouseY <420) {
-      image(text_box,0,700);
-      textSize(25);
+      image(text_box,0,800);
+      textSize(17);
       fill(0);
-      text("Some posters of your favourite bands.", 110, 800);
+      text("Some posters of your favourite bands.", 50, 845);
   } else if (mouseIsPressed && mouseX > 500 && mouseX<760 &&
    mouseY>300 && mouseY <430) {
-      image(text_box,0,700);
-      textSize(25);
+      image(text_box,0,800);
+      textSize(17);
       fill(0);
-      text("Your laptop. You usually use it to watch videos. ", 110, 800);
+      text("Your laptop. You usually use it to watch videos. ", 50, 845);
 }
 }
 
@@ -456,7 +479,7 @@ function currentScene8() { //TIME GOES
       textSize(25);
       fill(0);
       image(text_box_grey,0,700);
-      text_box_grey.resize(650,300);
+      text_box_grey.resize(680,300);
       text("Time goes by so fast and you ",60, 800);
       text("start panicking all of a sudden. ", 60, 850);
 
@@ -525,14 +548,15 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
 
   function currentScene12() {
 
-    scene11 === false;                                                  //lantern + search the room       not'U nasıl renkli yapabilrim
-    for (let x = 0; x < room_clean.width; x++) {
-    for (let y = 0; y < room_clean.height; y++) {
+    scene11 === false;
+                                       //lantern + search the room       not'U nasıl renkli yapabilrim
+    for (let x = 0; x < room_panic_mode.width; x++) {
+    for (let y = 0; y < room_panic_mode.height; y++) {
       // Calculate the 1D location from a 2D grid
-      let loc = (x + y * room_clean.width) * 4;
+      let loc = (x + y * room_panic_mode.width) * 4;
       // Get the R,G,B values from image                                     extract the notes pixels
       let r, g, b;
-      r = room_clean.pixels[loc];
+      r = room_panic_mode.pixels[loc];
       // Calculate an amount to change brightness based on proximity to the mouse
       let maxdist = 50;
       let d = dist(x, y, mouseX, mouseY);
@@ -550,6 +574,8 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
     }
   }
   updatePixels();
+  image(noteSavesU,0,0);
+
   if (mouseIsPressed && mouseX > 825 && mouseX<880 &&
    mouseY>180 && mouseY <230) {
      currentScene13();
@@ -573,19 +599,17 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
 
 function currentScene14() {          // sketchbook final scene
       scene13 === false;
-      image(sketchbook_page,0,0);
-      c = map(mouseX,0,width,0,360)
+      scene5 === false;
+
       strokeWeight(0);
-      for (var x = 0;x<width;x = x + 1){
-          fill(x/360 * 360, 100, 100);
-        	rect(x, height - 30, 30,30)
-        	}
-  strokeWeight(2);
-  if(mouseIsPressed){
-  	//stroke(c,75,100)
-   line(mouseX,mouseY,pmouseX,pmouseY)
-  	}
-}
+      if (mouseIsPressed)
+      //Change these numbers to change the color, (Red,Green,Blue,Alfa).
+          fill(0,0,0,200);
+          if (mouseIsPressed)
+      //Change the numbers to change the size of the ellipse,(Width,Hight).
+          ellipse(mouseX,mouseY,32,32);
+      }
+
 
 function mousePressed() {                /// dragging the trash + pencil ///
 
@@ -593,12 +617,9 @@ if(scene7 === true) {
   puzzle.mousePressed(mouseX, mouseY);
 }
 
-if(scene14 === true) {
-  if((mouseX > 0) && (mouseX < width) && (mouseY > height - 30) && (mouseY < height)){
-      stroke(c,75,100)
-		}
+
   //happySong.play();
-}
+
 
    //current_image = current_image + 1;
   // Did I click on the rectangle?
