@@ -53,13 +53,17 @@ var scene11 = false;
 var scene12 = false;
 var scene13 = false;
 var scene14 = false;
+var sceneBook = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
 
 var puzzle;
+var puzzle1;
+
 var photo_memory;
 var memoryOfPhoto;
+var memoryOfBook;
 var bacc;
 var pinkRect;
 
@@ -90,6 +94,8 @@ function preload() {
   bacc = loadImage('assets/light_blue_background.png');
   pinkRect = loadImage ('assets/rectangle_pink.png');
 
+  memoryOfBook = loadImage ('assets/memory_of_book.png');
+
   panicRoom2 = loadImage ('assets/roomMelts_25.png');
   panicRoom3 = loadImage ('assets/roomMelts_26.png');
   room_panic_mode = loadImage('assets/room_panic_mode.png')
@@ -112,6 +118,11 @@ function setup() {
   var x0 = 600 - photo_memory.width / 2;
   var y0 = 450 - photo_memory.height / 2;
   puzzle = new Puzzle(x0, y0, photo_memory, 2);
+
+  var x1 = 600 - memoryOfBook.width / 2;
+  var y1 = 450 - memoryOfBook.height / 2;
+  puzzle1 = new Puzzle(x1, y1, memoryOfBook, 2);
+
 
   pixelDensity(1);
   room_panic_mode.loadPixels();
@@ -216,6 +227,14 @@ if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
 
    }
 
+if (mouseIsPressed && mouseX > 360 && mouseX<670 &&  //mouse is clicked on GLUE FOR NOW
+       mouseY>425 && mouseY <710) {
+         scene6 = false;
+         scene4 = false;
+         sceneBook = true;
+
+      }
+
 if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on clock
        mouseY>30 && mouseY <200) {
          scene6 = false;
@@ -226,6 +245,20 @@ if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on clock
       }
 
 }
+if (sceneBook == true) {     // CLEAN ROOM
+    bookMemory();
+       scene7 = false;
+       scene6 = false;
+       sceneBook = true;
+
+       if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+        mouseY>750 && mouseY <850) {
+               sceneBook = false;
+               scene5 = false;
+               scene6 = true;
+               currentScene6();
+       }
+   }
 
 if (scene7 == true) {     // CLEAN ROOM
     currentScene7();
@@ -428,6 +461,13 @@ console.log(mouseX,mouseY);
       scene5 = false;
       scene8 = true;
 
+} else if (mouseIsPressed && mouseX > 350 && mouseX<670 &&  //mouse is clicked on clock
+    mouseY>425 && mouseY <710) {
+      bookMemory();
+      scene7 = false;
+      scene6 = false;
+      scene5 = false;
+
 }
 
    if(mouseIsPressed && mouseX > 85 && mouseX<425 &&
@@ -450,6 +490,26 @@ function currentScene7() {
   clear();
   image(bacc,0,0);
   puzzle.draw();
+
+  image(pinkRect,1000,800,60,30);
+  textSize(12);
+  fill(0);
+  text("Go Back ", 1000, 820);
+
+if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+ mouseY>750 && mouseY <850) {
+        scene7 = false;
+        scene5 = false;
+        scene6 = true;
+        currentScene6();
+}
+}
+
+function bookMemory() {
+
+  clear();
+  image(bacc,0,0);
+  puzzle1.draw();
 
   image(pinkRect,1000,800,60,30);
   textSize(12);
@@ -616,6 +676,9 @@ function mousePressed() {                /// dragging the trash + pencil ///
 if(scene7 === true) {
   puzzle.mousePressed(mouseX, mouseY);
 }
+if(sceneBook === true) {
+  puzzle1.mousePressed(mouseX, mouseY);
+}
 
 
   //happySong.play();
@@ -655,6 +718,9 @@ function mouseDragged () {
   if(scene7 === true) {
     puzzle.mouseDragged(mouseX, mouseY);
   }
+  if(sceneBook === true) {
+    puzzle1.mouseDragged(mouseX, mouseY);
+  }
 
 
   for (var i = 0; i < papers.length; i++) {
@@ -672,6 +738,10 @@ function mouseReleased() {
   if(scene7 === true) {
     puzzle.mouseReleased();
   }
+  if(sceneBook === true) {
+    puzzle1.mouseReleased();
+  }
+
 
   // Quit dragging
   for (var i = 0; i < papers.length; i++) {
