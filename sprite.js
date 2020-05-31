@@ -766,32 +766,47 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
   function currentScene12() {
 
     scene11 === false;
-                                       //lantern + search the room       not'U nasıl renkli yapabilrim
-    for (let x = 0; x < room_panic_mode.width; x++) {
-    for (let y = 0; y < room_panic_mode.height; y++) {
-      // Calculate the 1D location from a 2D grid
-      let loc = (x + y * room_panic_mode.width) * 4;
-      // Get the R,G,B values from image                                     extract the notes pixels
-      let r, g, b;
-      r = room_panic_mode.pixels[loc];
-      // Calculate an amount to change brightness based on proximity to the mouse
-      let maxdist = 50;
-      let d = dist(x, y, mouseX, mouseY);
-      let adjustbrightness = (255 * (maxdist - d)) / maxdist;
-      r += adjustbrightness;
-      // Constrain RGB to make sure they are within 0-255 color range
-      r = constrain(r, 0, 255);
-      // Make a new color and set pixel in the window
-      //color c = color(r, g, b);
-      let pixloc = (y * width + x) * 4;
-      pixels[pixloc] = r;
-      pixels[pixloc + 1] = r;
-      pixels[pixloc + 2] = r;
-      pixels[pixloc + 3] = 255;
+
+    loadPixels();
+  	var lightRadius = 90;
+    // We must also call loadPixels() on the PImage since we are going to read its pixels.
+    room_panic_mode.loadPixels();
+    for (var y = 0; y < height; y++ ) {
+      for (var x = 0; x < width; x++ ) {
+        var loc = (x + y * width) * 4;
+        // The functions red(), green(), and blue() pull out the three color components from a pixel.
+        var r = room_panic_mode.pixels[loc   ];
+        var g = room_panic_mode.pixels[loc + 1];
+        var b = room_panic_mode.pixels[loc + 2];
+
+        // Calculate an amount to change brightness
+        // based on proximity to the mouse
+        var distance = dist(x, y, mouseX, mouseY);
+
+        // The closer the pixel is to the mouse, the lower the value of "distance"
+        // We want closer pixels to be brighter, however, so we invert the value using map()
+        // Pixels with a distance greater than the lightRadius have a brightness of 0.0
+        // (or negative which is equivalent to 0 here)
+        // Pixels with a distance of 0 have a brightness of 1.0.
+        var adjustBrightness = map(distance, 0, lightRadius, 1, 0);
+        r *= adjustBrightness;
+        g *= adjustBrightness;
+        b *= adjustBrightness;
+
+        // Constrain RGB to between 0-255
+        r = constrain(r, 0, 255);
+        g = constrain(g, 0, 255);
+        b = constrain(b, 0, 255);
+
+        // Set the display pixel to the image pixel
+        pixels[loc    ] = r;
+        pixels[loc + 1] = g;
+        pixels[loc + 2] = b;
+        pixels[loc + 3] = 255; // Always have to set alpha
+      }
     }
-  }
   updatePixels();
-  image(noteSavesU,0,0);
+//image(noteSavesU,0,0);
 
   if (mouseIsPressed && mouseX > 825 && mouseX<880 &&
    mouseY>180 && mouseY <230) {
@@ -815,8 +830,22 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
 }
 
 function currentScene14() {          // sketchbook final scene
+ scene1 = false;
+ scene2 = false;
+ scene3 = false;
+ scene4 = false;
+ scene5 = false;
+ scene6 = false;
+ scene7 = false;
+ scene8 = false;
+ scene9 = false;
+ scene10 = false;
+ scene11 = false;
+ scene12 = false;
+
       scene13 === false;
       scene5 === false;
+      scene14 === true;
 
       strokeWeight(0);
       if (mouseIsPressed)
