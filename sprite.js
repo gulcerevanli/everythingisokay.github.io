@@ -29,6 +29,7 @@ var noteSavesU;
 
 let timegoes;
 let timer = 10;
+let lockingCounter = 0;
 
 let papers = [];
 let paper;
@@ -54,19 +55,29 @@ var scene12 = false;
 var scene13 = false;
 var scene14 = false;
 var sceneBook = false;
+var scenePlant = false;
+var sceneSmiley = false;
+var sceneDrawing = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
 
 var puzzle;
 var puzzle1;
+var puzzle2;
+var puzzle3;
+var puzzle4;
+
 
 var photo_memory;
 var memoryOfPhoto;
 var memoryOfBook;
+var memoryOfDrawing;
+var memoryOfPlant;
+var memoryOfSmiley;
+
 var bacc;
 var pinkRect;
-
 
 function preload() {
 
@@ -91,6 +102,11 @@ function preload() {
   memoryOfPhoto_5 = loadImage ('assets/5.png');
   memoryOfPhoto_5 = loadImage ('assets/6.png');
   photo_memory = loadImage('assets/memory_of_photo.png');
+  memoryOfDrawing = loadImage('assets/memory_of_drawing.png');
+  memoryOfPlant = loadImage('assets/memory_of_plant.png');
+  memoryOfSmiley = loadImage('assets/memory_of_smiley.png');
+
+
   bacc = loadImage('assets/light_blue_background.png');
   pinkRect = loadImage ('assets/rectangle_pink.png');
 
@@ -123,6 +139,17 @@ function setup() {
   var y1 = 450 - memoryOfBook.height / 2;
   puzzle1 = new Puzzle(x1, y1, memoryOfBook, 2);
 
+  var x2 = 600 - memoryOfDrawing.width / 2;
+  var y2 = 450 - memoryOfDrawing.height / 2;
+  puzzle2 = new Puzzle(x2, y2, memoryOfDrawing, 2);
+
+  var x3 = 600 - memoryOfPlant.width / 2;
+  var y3 = 450 - memoryOfPlant.height / 2;
+  puzzle3 = new Puzzle(x3, y3, memoryOfPlant, 2);
+
+  var x4 = 600 - memoryOfSmiley.width / 2;
+  var y4 = 450 - memoryOfSmiley.height / 2;
+  puzzle4 = new Puzzle(x4, y4, memoryOfSmiley, 2);
 
   pixelDensity(1);
   room_panic_mode.loadPixels();
@@ -181,6 +208,7 @@ if (scene3 == true) {
 }
 if (scene4 == true) {
  currentScene4();
+ console.log(mouseX,mouseY);
 
   for (var i = 0; i < papers.length; i++) {
   papers[i].show();
@@ -219,6 +247,7 @@ if (scene6 == true) {     // CLEAN ROOM
        scene4 = false;
        scene6 = true;
 
+
 if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
     mouseY>90 && mouseY <168) {
       scene6 = false;
@@ -227,13 +256,33 @@ if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
 
    }
 
-if (mouseIsPressed && mouseX > 360 && mouseX<670 &&  //mouse is clicked on GLUE FOR NOW
-       mouseY>425 && mouseY <710) {
+if (mouseIsPressed && mouseX > 200 && mouseX<350 &&  //mouse is clicked on book
+    mouseY>740 && mouseY <780) {
          scene6 = false;
          scene4 = false;
          sceneBook = true;
 
       }
+
+if (mouseIsPressed && mouseX > 877 && mouseX< 925 &&  //mouse is clicked on smiley
+    mouseY>130 && mouseY <170) {
+          scene6 = false;
+          scene4 = false;
+          sceneSmiley = true;
+      }
+
+if (mouseIsPressed && mouseX > 1000 && mouseX< 1150 &&  //mouse is clicked on plant
+    mouseY>275 && mouseY <680) {
+          scene6 = false;
+          scene4 = false;
+          scenePlant = true;
+    }
+if (mouseIsPressed && mouseX > 780 && mouseX< 855 &&  //mouse is clicked on drawing
+    mouseY>250 && mouseY <370) {
+          scene6 = false;
+          scene4 = false;
+          sceneDrawing = true;
+    }
 
 if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on clock
        mouseY>30 && mouseY <200) {
@@ -245,7 +294,7 @@ if (mouseIsPressed && mouseX > 56 && mouseX<210 &&  //mouse is clicked on clock
       }
 
 }
-if (sceneBook == true) {     // CLEAN ROOM
+if (sceneBook == true) {     //
     bookMemory();
        scene7 = false;
        scene6 = false;
@@ -259,6 +308,51 @@ if (sceneBook == true) {     // CLEAN ROOM
                currentScene6();
        }
    }
+
+   if (scenePlant == true) {     //
+      plantMemory();
+          scene7 = false;
+          scene6 = false;
+          scenePlant = true;
+
+          if (mouseIsPressed && mouseX > 1000 && mouseX<1050 &&
+           mouseY>750 && mouseY <850) {
+                  scenePlant = false;
+                  scene5 = false;
+                  scene6 = true;
+                  currentScene6();
+          }
+      }
+
+  if (sceneSmiley == true) {     //
+     smileyMemory();
+        scene7 = false;
+        scene6 = false;
+        sceneSmiley = true;
+
+       if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+        mouseY>750 && mouseY <850) {
+             sceneSmiley = false;
+             scene5 = false;
+             scene6 = true;
+             currentScene6();
+           }
+     }
+
+     if (sceneDrawing == true) {     //
+        drawingMemory();
+           scene7 = false;
+           scene6 = false;
+           sceneDrawing = true;
+
+          if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+           mouseY>750 && mouseY <850) {
+                sceneDrawing = false;
+                scene5 = false;
+                scene6 = true;
+                currentScene6();
+              }
+        }
 
 if (scene7 == true) {     // CLEAN ROOM
     currentScene7();
@@ -427,6 +521,9 @@ function currentScene6() {
   if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
      timer --;
    }
+   if (lockingCounter > 3) {           // THERES NO FEEDBACK?
+     currentScene13();
+   }
 
   if (timer == 0) {
     currentScene8();
@@ -461,8 +558,8 @@ console.log(mouseX,mouseY);
       scene5 = false;
       scene8 = true;
 
-} else if (mouseIsPressed && mouseX > 350 && mouseX<670 &&  //mouse is clicked on clock
-    mouseY>425 && mouseY <710) {
+} else if (mouseIsPressed && mouseX > 200 && mouseX<350 &&  //mouse is clicked on book
+    mouseY>740 && mouseY <780) {
       bookMemory();
       scene7 = false;
       scene6 = false;
@@ -510,6 +607,66 @@ function bookMemory() {
   clear();
   image(bacc,0,0);
   puzzle1.draw();
+
+  image(pinkRect,1000,800,60,30);
+  textSize(12);
+  fill(0);
+  text("Go Back ", 1000, 820);
+
+if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+ mouseY>750 && mouseY <850) {
+        scene7 = false;
+        scene5 = false;
+        scene6 = true;
+        currentScene6();
+}
+}
+
+function smileyMemory() {
+
+  clear();
+  image(bacc,0,0);
+  puzzle4.draw();
+
+  image(pinkRect,1000,800,60,30);
+  textSize(12);
+  fill(0);
+  text("Go Back ", 1000, 820);
+
+if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+ mouseY>750 && mouseY <850) {
+        scene7 = false;
+        scene5 = false;
+        scene6 = true;
+        currentScene6();
+}
+}
+
+function drawingMemory() {
+
+  clear();
+  image(bacc,0,0);
+  puzzle2.draw();
+
+  image(pinkRect,1000,800,60,30);
+  textSize(12);
+  fill(0);
+  text("Go Back ", 1000, 820);
+
+if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
+ mouseY>750 && mouseY <850) {
+        scene7 = false;
+        scene5 = false;
+        scene6 = true;
+        currentScene6();
+}
+}
+
+function plantMemory() {
+
+  clear();
+  image(bacc,0,0);
+  puzzle3.draw();
 
   image(pinkRect,1000,800,60,30);
   textSize(12);
@@ -679,6 +836,16 @@ if(scene7 === true) {
 if(sceneBook === true) {
   puzzle1.mousePressed(mouseX, mouseY);
 }
+  if(sceneDrawing === true) {
+    puzzle2.mousePressed(mouseX, mouseY);
+  }
+
+  if(scenePlant === true) {
+    puzzle3.mousePressed(mouseX, mouseY);
+  }
+  if(sceneSmiley === true) {
+    puzzle4.mousePressed(mouseX, mouseY);
+  }
 
 
   //happySong.play();
@@ -721,6 +888,16 @@ function mouseDragged () {
   if(sceneBook === true) {
     puzzle1.mouseDragged(mouseX, mouseY);
   }
+  if(sceneDrawing === true) {
+    puzzle2.mouseDragged(mouseX, mouseY);
+  }
+
+  if(scenePlant === true) {
+    puzzle3.mouseDragged(mouseX, mouseY);
+  }
+  if(sceneSmiley === true) {
+    puzzle4.mouseDragged(mouseX, mouseY);
+  }
 
 
   for (var i = 0; i < papers.length; i++) {
@@ -740,6 +917,17 @@ function mouseReleased() {
   }
   if(sceneBook === true) {
     puzzle1.mouseReleased();
+  }
+
+  if(sceneDrawing === true) {
+    puzzle2.mouseReleased();
+  }
+
+  if(scenePlant === true) {
+    puzzle3.mouseReleased();
+  }
+  if(sceneSmiley === true) {
+    puzzle4.mouseReleased();
   }
 
 
@@ -932,6 +1120,7 @@ var Puzzle = (function() {
 			if (nrCorrect === nrCorrectNeeded) {
             var h1 = createElement("h1", "Well Done!");
             this.canPlay = false;
+            lockingCounter ++;
         } else {
 
           console.log("Right places: " + nrCorrect);
