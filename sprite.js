@@ -80,7 +80,8 @@ var memoryOfSmiley;
 
 var timeShow;
 var purpleTime;
-
+var completed;
+var checkPuzzle;
 var bacc;
 var pinkRect;
 
@@ -101,6 +102,8 @@ function preload() {
   sketchbook_page = loadImage ('assets/sketchbook_page.png');
   room_hints = loadImage('assets/room_hints.png');
   timeShow = loadImage('assets/time_ui.png');
+  completed = loadImage('assets/completed.png');
+  checkPuzzle = loadImage('assets/check_the_puzzles.png');
 
   purpleTime = loadImage('assets/purple.png');
     purpleTime.resize(100,60);
@@ -531,11 +534,9 @@ function currentScene5() {   //SKETCHBOOK + PENCIL
 // EXPLORE THE ROOM
 function currentScene6() {
 
+    ///  image(completed,)
+      //currentScene13();
 
-
-   if (lockingCounter > 3) {           // THERES NO FEEDBACK?
-     currentScene13();
-   }
 
   if (timer == 0) {
     currentScene8();
@@ -548,9 +549,8 @@ function currentScene6() {
 
   image(room_hints,0,0);
   image(sketchbook,800,370);
-
     image(text_box,0,830);
-    text_box.resize(780,70);
+    text_box.resize(750,70);
     textSize(17);
     fill(0);
 
@@ -567,8 +567,15 @@ function currentScene6() {
        image(purpleTime, 68, 850, t*3 , 40)
        image(timeShow,60,840);
        timeShow.resize(105,60);
-       ; //FORMATION BAR
+       ;
      }
+        if (lockingCounter <= 4) {           // THERES NO FEEDBACK?
+          let p = map(lockingCounter, 0, x, 0, 600);
+          fill(255, 50, 50);
+          image(completed,290,855,p*9.2,30);
+          image(checkPuzzle, 278,845);
+          checkPuzzle.resize(166,50);
+}
 
 console.log(mouseX,mouseY);
 // else if
