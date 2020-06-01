@@ -26,6 +26,7 @@ let blueScreen;
 let sketchbook_page;
 var room_panic_mode;
 var noteSavesU;
+var room_hints;
 
 let timegoes;
 let timer = 10;
@@ -58,6 +59,7 @@ var sceneBook = false;
 var scenePlant = false;
 var sceneSmiley = false;
 var sceneDrawing = false;
+var bacgroundd = false;
 
 var x, y, w, h;          // Location and size OF THE PEN
 var offsetX, offsetY;
@@ -75,6 +77,9 @@ var memoryOfBook;
 var memoryOfDrawing;
 var memoryOfPlant;
 var memoryOfSmiley;
+
+var timeShow;
+var purpleTime;
 
 var bacc;
 var pinkRect;
@@ -94,6 +99,12 @@ function preload() {
   icon = loadImage ('assets/icon.png');
   pencil = loadImage ('assets/pencil.png');
   sketchbook_page = loadImage ('assets/sketchbook_page.png');
+  room_hints = loadImage('assets/room_hints.png');
+  timeShow = loadImage('assets/time_ui.png');
+
+  purpleTime = loadImage('assets/purple.png');
+    purpleTime.resize(100,60);
+
 
   memoryOfPhoto_1 = loadImage ('assets/1.png');
   memoryOfPhoto_2 = loadImage ('assets/2.png');
@@ -246,6 +257,7 @@ if (scene6 == true) {     // CLEAN ROOM
        scene5 = false;
        scene4 = false;
        scene6 = true;
+
 
 
 if (mouseIsPressed && mouseX > 745 && mouseX<800 &&  //mouse is clicked on photo
@@ -421,16 +433,17 @@ if (scene10 == true) {     // text scene 2
 
       }
 
-    if ( scene14 == true) {     // final sketcbook scene
+    if ( scene14 == true) {
+        bacgrounddd();
+        if (mouseIsPressed) {          // final sketcbook scene
         currentScene14();
         scene13 === false;
         scene12 === false;
-        scene14 === true;
+        scene14 === false;
 
      }
 }
-
-
+}
  function currentScene1() {
    image(blueScreen,0,0);
    textSize(45);
@@ -518,9 +531,8 @@ function currentScene5() {   //SKETCHBOOK + PENCIL
 // EXPLORE THE ROOM
 function currentScene6() {
 
-  if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
-     timer --;
-   }
+
+
    if (lockingCounter > 3) {           // THERES NO FEEDBACK?
      currentScene13();
    }
@@ -534,13 +546,29 @@ function currentScene6() {
 
 }
 
-  image(room_clean,0,0);
+  image(room_hints,0,0);
   image(sketchbook,800,370);
-         image(text_box,0,-10);
-         text_box.resize(780,70);
-         textSize(17);
-         fill(0);
-         text("To get inspired, explore the room. ", 50, 35);
+
+    image(text_box,0,830);
+    text_box.resize(780,70);
+    textSize(17);
+    fill(0);
+
+
+    //text("To get inspired, explore the room. ", 50, 35);
+
+    if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+       timer --;
+     }
+     if (timer < 20) {
+      // Form()
+       let t = map(timer, 0, x, 0, 600);
+       fill(255, 50, 50);
+       image(purpleTime, 68, 850, t*3 , 40)
+       image(timeShow,60,840);
+       timeShow.resize(105,60);
+       ; //FORMATION BAR
+     }
 
 console.log(mouseX,mouseY);
 // else if
@@ -806,6 +834,11 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
       }
     }
   updatePixels();
+//  image(text_box,0,-10);
+//  text_box.resize(780,70);
+  textSize(17);
+  fill(255);
+  text("Use your Ray to find the note ", 50, 35);
 //image(noteSavesU,0,0);
 
   if (mouseIsPressed && mouseX > 825 && mouseX<880 &&
@@ -828,30 +861,24 @@ if (mouseIsPressed && mouseX > 900 && mouseX<1050 &&
             scene14 === true;
    }
 }
+function bacgrounddd() {
+  image(sketchbook_page,0,0);
+  noLoop();
+}
 
 function currentScene14() {          // sketchbook final scene
- scene1 = false;
- scene2 = false;
- scene3 = false;
- scene4 = false;
- scene5 = false;
- scene6 = false;
- scene7 = false;
- scene8 = false;
- scene9 = false;
- scene10 = false;
- scene11 = false;
- scene12 = false;
-
+      bacgroundd === false;
       scene13 === false;
-      scene5 === false;
-      scene14 === true;
+      scene14 === false;
+
+    //  noLoop();
 
       strokeWeight(0);
       if (mouseIsPressed)
       //Change these numbers to change the color, (Red,Green,Blue,Alfa).
           fill(0,0,0,200);
           if (mouseIsPressed)
+          loop();
       //Change the numbers to change the size of the ellipse,(Width,Hight).
           ellipse(mouseX,mouseY,32,32);
       }
@@ -875,7 +902,6 @@ if(sceneBook === true) {
   if(sceneSmiley === true) {
     puzzle4.mousePressed(mouseX, mouseY);
   }
-
 
   //happySong.play();
 
@@ -927,6 +953,7 @@ function mouseDragged () {
   if(sceneSmiley === true) {
     puzzle4.mouseDragged(mouseX, mouseY);
   }
+
 
 
   for (var i = 0; i < papers.length; i++) {
