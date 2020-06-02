@@ -146,7 +146,8 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(1200, 900);
+  background(222, 255, 35);
 
   background(sketchbook_page, 0, 0);
   textFont(ocr);
@@ -196,7 +197,7 @@ function setup() {
 }
 
 function draw() {
-  background(222, 255, 35);
+
   if (scene1) {
     currentScene1();
 
@@ -269,21 +270,22 @@ function draw() {
     currentScene6();
     scene5 = false;
     scene4 = false;
+    scene7 = false;
 
-    if (timer > 30) { // THERES NO FEEDBACK?
+    if (timer  < 1) { // THERES NO FEEDBACK?
       scene8 = true;
       scene6 = false;
       currentScene8();
     }
 
-    if (lockingCounter > 4) { // THERES NO FEEDBACK?
+  else if (lockingCounter > 4) { // THERES NO FEEDBACK?
       scene13 = true;
       scene6 = false;
       currentScene13();
     }
 
 
-    if (mouseIsPressed && mouseX > 745 && mouseX < 800 && //mouse is clicked on photo
+  else  if (mouseIsPressed && mouseX > 745 && mouseX < 800 && //mouse is clicked on photo
       mouseY > 90 && mouseY < 168) {
       scene6 = false;
       scene4 = false;
@@ -291,7 +293,7 @@ function draw() {
 
     }
 
-    if (mouseIsPressed && mouseX > 200 && mouseX < 350 && //mouse is clicked on book
+else  if (mouseIsPressed && mouseX > 200 && mouseX < 350 && //mouse is clicked on book
       mouseY > 740 && mouseY < 780) {
       scene6 = false;
       scene4 = false;
@@ -299,34 +301,26 @@ function draw() {
 
     }
 
-    if (mouseIsPressed && mouseX > 877 && mouseX < 925 && //mouse is clicked on smiley
+  else  if (mouseIsPressed && mouseX > 877 && mouseX < 925 && //mouse is clicked on smiley
       mouseY > 130 && mouseY < 170) {
       scene6 = false;
       scene4 = false;
       sceneSmiley = true;
     }
 
-    if (mouseIsPressed && mouseX > 1000 && mouseX < 1150 && //mouse is clicked on plant
+else    if (mouseIsPressed && mouseX > 1000 && mouseX < 1150 && //mouse is clicked on plant
       mouseY > 275 && mouseY < 680) {
       scene6 = false;
       scene4 = false;
       scenePlant = true;
     }
-    if (mouseIsPressed && mouseX > 780 && mouseX < 855 && //mouse is clicked on drawing
+else    if (mouseIsPressed && mouseX > 780 && mouseX < 855 && //mouse is clicked on drawing
       mouseY > 250 && mouseY < 370) {
       scene6 = false;
       scene4 = false;
       sceneDrawing = true;
     }
 
-    if (mouseIsPressed && mouseX > 56 && mouseX < 210 && //mouse is clicked on clock
-      mouseY > 30 && mouseY < 200) {
-      scene6 = false;
-      scene4 = false;
-      scene7 = false;
-      scene8 = true;
-
-    }
 
   } // end of if (scene6)
 
@@ -408,7 +402,6 @@ function draw() {
     currentScene8();
     scene7 = false;
     scene6 = false;
-    scene8 = true;
   }
 
 
@@ -446,13 +439,16 @@ function draw() {
       noteScene = true;
       // note();
     }
-
-
   }
 
   if (noteScene) {
     note();
-
+    scene13 = false;
+    if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
+      mouseY > 550 && mouseY < 750) {
+      noteScene = false;
+      scene13 = true;
+    }
   }
 
   if (scene13) { // scene after the darkness
@@ -466,20 +462,19 @@ function draw() {
       scene13 = false;
       scene12 = false;
       scene14 = true;
-      currentScene14();
     }
 
   }
 
   if (scene14) {
-    bacgrounddd();
-    if (mouseIsPressed) { // final sketcbook scene
+    //  bacgrounddd();
+   // final sketcbook scene
       currentScene14();
       scene13 = false;
       scene12 = false;
       scene14 = false;
 
-    }
+
   }
 }
 
@@ -647,7 +642,6 @@ console.log("currentScene6");
     note();
   }
 
-   console.log("currentScene7");
   // else if
   if (mouseIsPressed && mouseX > 745 && mouseX < 800 && //mouse is clicked on photo
     mouseY > 90 && mouseY < 168) {
@@ -689,6 +683,7 @@ console.log("currentScene6");
 }
 
 function currentScene7() {
+    console.log("currentScene7");
 
   clear();
   image(bacc, 0, 0);
@@ -791,8 +786,8 @@ function plantMemory() {
 function currentScene8() { //TIME GOES
   scene7 = false;
   console.log("currentScene8");
-  textSize(25);
-  fill(0);
+//  textSize(25);
+//  fill(0);
   //  image (timegoes,0,0);
 
   //TIME GOES ANIMATION
@@ -800,7 +795,7 @@ function currentScene8() { //TIME GOES
   clock.goToFrame(clock.getLastFrame());
   animation(clock, 600, 450);
   textSize(25);
-  fill(0);
+  //fill(0);
   image(text_box_grey, 0, 700);
   text_box_grey.resize(680, 300);
   text("Time goes by so fast and you ", 60, 800);
@@ -936,6 +931,18 @@ function note() { //
 
   image(noteIsFound, 0, 0);
 
+  textSize(25);
+  fill(0);
+  text("You've found the motivation to create again! ", 60, 850);
+  image(icon, 1000, 600, 30, 30);
+  if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
+    mouseY > 550 && mouseY < 750) {
+    currentScene13();
+    noteScene = false;
+    scene12 = false;
+    scene13 = true;
+  }
+
 
 }
 
@@ -955,15 +962,14 @@ function currentScene13() { // scene after the darkness
 
 function bacgrounddd() {
   image(sketchbook_page, 0, 0);
-  noLoop();
+  
 }
 
 function currentScene14() { // sketchbook final scene
     console.log("currentScene14");
-  bacgroundd = false;
-  scene13 = false;
-  scene14 = false;
-
+    image(sketchbook_page, 0, 0);
+    noLoop();
+    loop();
   //  noLoop();
 
   strokeWeight(0);
