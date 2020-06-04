@@ -20,6 +20,8 @@ last update: May 26, Thu
 
 */
 
+let drawing = [];
+
 var room_clean;
 var sketchbook;
 let blueScreen;
@@ -146,10 +148,11 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1200, 900);
+
+  let c = createCanvas(1200,900);
   background(222, 255, 35);
 
-  background(sketchbook_page, 0, 0);
+
   textFont(ocr);
 
   imgCheckedBox.resize(50, 50);
@@ -272,49 +275,37 @@ function draw() {
     scene4 = false;
     scene7 = false;
 
-    if (timer  < 1) { // THERES NO FEEDBACK?
+    if (timer < 1) { // THERES NO FEEDBACK?
       scene8 = true;
       scene6 = false;
       currentScene8();
-    }
-
-  else if (lockingCounter > 4) { // THERES NO FEEDBACK?
+    } else if (lockingCounter > 4) { // THERES NO FEEDBACK?
       scene13 = true;
       scene6 = false;
       currentScene13();
-    }
-
-
-  else  if (mouseIsPressed && mouseX > 745 && mouseX < 800 && //mouse is clicked on photo
+    } else if (mouseIsPressed && mouseX > 745 && mouseX < 800 && //mouse is clicked on photo
       mouseY > 90 && mouseY < 168) {
       scene6 = false;
       scene4 = false;
       scene7 = true;
 
-    }
-
-else  if (mouseIsPressed && mouseX > 200 && mouseX < 350 && //mouse is clicked on book
+    } else if (mouseIsPressed && mouseX > 200 && mouseX < 350 && //mouse is clicked on book
       mouseY > 740 && mouseY < 780) {
       scene6 = false;
       scene4 = false;
       sceneBook = true;
 
-    }
-
-  else  if (mouseIsPressed && mouseX > 877 && mouseX < 925 && //mouse is clicked on smiley
+    } else if (mouseIsPressed && mouseX > 877 && mouseX < 925 && //mouse is clicked on smiley
       mouseY > 130 && mouseY < 170) {
       scene6 = false;
       scene4 = false;
       sceneSmiley = true;
-    }
-
-else    if (mouseIsPressed && mouseX > 1000 && mouseX < 1150 && //mouse is clicked on plant
+    } else if (mouseIsPressed && mouseX > 1000 && mouseX < 1150 && //mouse is clicked on plant
       mouseY > 275 && mouseY < 680) {
       scene6 = false;
       scene4 = false;
       scenePlant = true;
-    }
-else    if (mouseIsPressed && mouseX > 780 && mouseX < 855 && //mouse is clicked on drawing
+    } else if (mouseIsPressed && mouseX > 780 && mouseX < 855 && //mouse is clicked on drawing
       mouseY > 250 && mouseY < 370) {
       scene6 = false;
       scene4 = false;
@@ -468,18 +459,19 @@ else    if (mouseIsPressed && mouseX > 780 && mouseX < 855 && //mouse is clicked
 
   if (scene14) {
     //  bacgrounddd();
-   // final sketcbook scene
-      currentScene14();
-      scene13 = false;
-      scene12 = false;
-      scene14 = false;
+    // final sketcbook scene
+    background(sketchbook_page, 0, 0);
+    currentScene14();
+    scene13 = false;
+    scene12 = false;
+    //scene14 = false;
 
 
   }
 }
 
 function currentScene1() {
-    console.log("currentScene1");
+  console.log("currentScene1");
   image(blueScreen, 0, 0);
   textSize(45);
   fill(254, 255, 0);
@@ -493,13 +485,14 @@ function currentScene1() {
 }
 
 function currentScene2() {
-    console.log("currentScene2");
+  console.log("currentScene2");
   image(blueScreen, 0, 0);
   textSize(45);
   fill(254, 255, 0);
   text("creativity usually comes", 120, 670);
   text("naturally to you but lately", 120, 730);
   text("you feel lost", 120, 790);
+  //scribble.scribbleLine( mouseX, mouseY);
   ///console.log(mouseX,mouseY);
 
 }
@@ -516,7 +509,7 @@ function currentScene4() { //initial scene after the story
 
   image(room_clean, 0, 0);
   image(sketchbook, 800, 370);
-console.log("currentScene4");
+  console.log("currentScene4");
 
   image(text_box, 0, -10);
   text_box.resize(780, 70);
@@ -570,7 +563,7 @@ function currentScene6() {
 
   ///  image(completed,)
   //currentScene13();
-console.log("currentScene6");
+  console.log("currentScene6");
 
   image(room_hints, 0, 0);
   image(sketchbook, 800, 370);
@@ -683,7 +676,7 @@ console.log("currentScene6");
 }
 
 function currentScene7() {
-    console.log("currentScene7");
+  console.log("currentScene7");
 
   clear();
   image(bacc, 0, 0);
@@ -786,8 +779,8 @@ function plantMemory() {
 function currentScene8() { //TIME GOES
   scene7 = false;
   console.log("currentScene8");
-//  textSize(25);
-//  fill(0);
+  //  textSize(25);
+  //  fill(0);
   //  image (timegoes,0,0);
 
   //TIME GOES ANIMATION
@@ -809,7 +802,7 @@ function currentScene8() { //TIME GOES
 }
 
 function currentScene9() { // PANIC_1
-    console.log("currentScene9");
+  console.log("currentScene9");
   scene8 = false;
   image(panicRoom2, 0, 0, 1200, 900);
   textSize(25);
@@ -829,7 +822,7 @@ function currentScene9() { // PANIC_1
 }
 
 function currentScene10() { // PANIC_2
-    console.log("currentScene10");
+  console.log("currentScene10");
   scene9 = false;
   image(panicRoom2, 0, 0, 1200, 900);
   textSize(25);
@@ -848,7 +841,7 @@ function currentScene10() { // PANIC_2
 }
 
 function currentScene11() { // PANIC 3
-    console.log("currentScene11");
+  console.log("currentScene11");
   scene10 = false;
   image(panicRoom3, 0, 0, 1200, 900);
   textSize(25);
@@ -947,7 +940,7 @@ function note() { //
 }
 
 function currentScene13() { // scene after the darkness
-    console.log("currentScene13");
+  console.log("currentScene13");
   scene12 = false;
   image(room_clean, 0, 0);
   image(sketchbook, 800, 370);
@@ -962,24 +955,31 @@ function currentScene13() { // scene after the darkness
 
 function bacgrounddd() {
   image(sketchbook_page, 0, 0);
-  
+
 }
 
-function currentScene14() { // sketchbook final scene
-    console.log("currentScene14");
-    image(sketchbook_page, 0, 0);
-    noLoop();
-    loop();
-  //  noLoop();
 
-  strokeWeight(0);
-  if (mouseIsPressed)
-    //Change these numbers to change the color, (Red,Green,Blue,Alfa).
-    fill(0, 0, 0, 200);
-  if (mouseIsPressed)
-    loop();
-  //Change the numbers to change the size of the ellipse,(Width,Hight).
-  ellipse(mouseX, mouseY, 32, 32);
+
+function currentScene14() { // sketchbook final scene
+  console.log("currentScene14");
+  console.log(drawing);
+
+  drawing.push(mouseX);
+  drawing.push(mouseY);
+
+  fill(0, 100);
+  noStroke();
+
+  for (let i = 0; i < drawing.length; i++)
+    ellipse(drawing[i * 2], drawing[i * 2 + 1], 10, 10);
+
+  if(mouseIsPressed) {
+    saveCanvas('myCanvas', 'jpg');
+  }
+
+
+  //if (mouseIsPressed) {
+  ///  ellipse(mouseX, mouseY, 32, 32);
 }
 
 
