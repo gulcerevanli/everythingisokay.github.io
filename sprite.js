@@ -38,6 +38,7 @@ let papers = [];
 let paper;
 
 var clock;
+var sketchbook_Opens;
 
 let currentImage;
 
@@ -64,8 +65,8 @@ var sceneDrawing = false;
 var bacgroundd = false;
 var noteScene = false;
 
-var x, y, w, h; // Location and size OF THE PEN
-var offsetX, offsetY;
+var x, y; // Location and size OF THE PEN
+//var offsetX, offsetY;
 
 var puzzle;
 var puzzle1;
@@ -91,20 +92,45 @@ var imgUncheckedBox;
 var bacc;
 var pinkRect;
 
+var pencill;
+var sketchbook_Area;
+var draggedSprite;
+
 function preload() {
+  x = 200;
+  y = 760;
+  pencill =createSprite(x,y,110,65);
+  pencill.addImage(loadImage('assets/pencil.png'));
+  //pencill.mouseActive = true;
+  pencill.setCollider ('rectangle',55,33,100,65 );
+
+  pencill.onMousePressed = function() {
+     if (draggedSprite == null) {
+       draggedSprite = this;
+     }
+   };
+
+   pencill.onMouseReleased = function() {
+     if (draggedSprite == this) {
+       draggedSprite = null;
+     }
+   };
+
+  sketchbook_Area =createSprite(870,450,130,155);
+  sketchbook_Area.addImage(loadImage('assets/sketchbook_Area.png'));
 
   //timegoes = createVideo(['assets/timegoes.mov', 'assets/timegoes.webm']);
 
   blueScreen = loadImage('assets/blueScreen.png');
   ocr = loadFont('assets/OCRAStd.otf');
-  sketchbook = loadImage('assets/sketchbook_1.png');
+  sketchbook = loadImage('assets/sketchBook.png');
   room_clean = loadImage('assets/room_clean.png');
   paper = loadImage('assets/trashpaper.png');
   greenpaper = loadImage('assets/greenpaper.png');
   text_box = loadImage('assets/text_box.png');
   text_box_grey = loadImage('assets/text_box_grey.png');
   icon = loadImage('assets/icon.png');
-  pencil = loadImage('assets/pencil.png');
+//  pencil = loadImage('assets/pencil.png');
   sketchbook_page = loadImage('assets/sketchbook_page.png');
   room_hints = loadImage('assets/room_hints.png');
   timeShow = loadImage('assets/time_ui.png');
@@ -145,14 +171,13 @@ function preload() {
   clock = loadAnimation('assets/roomMelts_1.png', 'assets/roomMelts_2.png', 'assets/roomMelts_3.png', 'assets/roomMelts_4.png', 'assets/roomMelts_5.png', 'assets/roomMelts_6.png', 'assets/roomMelts_7.png', 'assets/roomMelts_8.png', 'assets/roomMelts_9.png', 'assets/roomMelts_10.png', 'assets/roomMelts_11.png', 'assets/roomMelts_12.png', 'assets/roomMelts_13.png', 'assets/roomMelts_14.png', 'assets/roomMelts_15.png', 'assets/roomMelts_16.png', 'assets/roomMelts_17.png', 'assets/roomMelts_18.png', 'assets/roomMelts_19.png', 'assets/roomMelts_20.png', 'assets/roomMelts_21.png', 'assets/roomMelts_22.png');
   //sketchbook = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png', 'assets/sketchbook_4.png', 'assets/sketchbook_5.png',)
   memoryOfPhoto = loadAnimation('assets/1.png', 'assets/2.png', 'assets/3.png', 'assets/4.png', 'assets/5.png', 'assets/6.png');
+  sketchbook_Opens = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png', 'assets/sketchbook_4.png', 'assets/sketchbook_5.png');
 }
 
 function setup() {
 
   let c = createCanvas(1200,900);
   background(222, 255, 35);
-
-
   textFont(ocr);
 
   imgCheckedBox.resize(50, 50);
@@ -183,19 +208,15 @@ function setup() {
   room_panic_mode.loadPixels();
   loadPixels();
 
-
-
   // Starting location OF THE PENCIL
-  x = 200;
-  y = 700;
+
   // Dimensions OF THE PENCIL
-  w = 75;
-  h = 50;
+ //w = 75;
+ //h = 50;
 
   for (var i = 0; i < 100; i++) {
     papers.push(new Paper(random(250), random(30, 90)));
   }
-
 
 }
 
@@ -213,6 +234,8 @@ function draw() {
   }
   if (scene2) {
     currentScene2();
+    scene1 = false;
+    scene3 = false;
     image(icon, 600, 850, 30, 30);
     if (mouseIsPressed && mouseX > 600 && mouseX < 630 &&
       mouseY > 850 && mouseY < 900) {
@@ -225,6 +248,9 @@ function draw() {
   }
   if (scene3) {
     currentScene3();
+    scene1 = false;
+    scene2 = false;
+    scene3 = true;
     image(icon, 1000, 800, 30, 30);
     if (mouseIsPressed && mouseX > 1000 && mouseX < 1050 &&
       mouseY > 800 && mouseY < 850) {
@@ -236,36 +262,35 @@ function draw() {
   }
   if (scene4) {
     currentScene4();
+    scene1 = false;
+    scene2 = false;
+    scene3 = false;
     ///console.log(mouseX, mouseY);
+    if (draggedSprite != null) {
+      draggedSprite.position.x = mouseX;
+      draggedSprite.position.y = mouseY;
+    }
 
     for (var i = 0; i < papers.length; i++) {
       papers[i].show();
 
-      scene3 = false;
-      scene4 = true;
     }
-
-    if (mouseIsPressed && mouseX > 800 && mouseX < 970 &&
-      mouseY > 370 && mouseY < 480) {
-      scene4 = false;
-      scene5 = true;
-
-    }
-  }
+ }
 
   if (scene5) {
     currentScene5();
     scene3 = false;
     scene4 = false;
     image(icon, 1000, 800, 30, 30);
-    if (mouseIsPressed && mouseX > 1000 && mouseX < 1050 &&
-      mouseY > 800 && mouseY < 850) {
-      scene5 = false;
-      scene4 = false;
-      scene6 = true;
-      currentScene6();
-      ///  console.log(mouseX,mouseY);
 
+    if (mouseIsPressed && mouseX > 1000 && mouseX < 1050 &&
+        mouseY > 800 && mouseY < 850) {
+          scene5 = false;
+          scene4 = false;
+          scene6 = true;
+          currentScene6();
+
+      ///  console.log(mouseX,mouseY);
     }
   }
 
@@ -428,9 +453,10 @@ function draw() {
       scene12 = false;
       scene13 = false;
       noteScene = true;
-      // note();
+      note();
+      }
     }
-  }
+
 
   if (noteScene) {
     note();
@@ -448,14 +474,7 @@ function draw() {
     scene11 = false;
     scene13 = true;
 
-    if (mouseIsPressed && mouseX > 800 && mouseX < 970 &&
-      mouseY > 370 && mouseY < 480) {
-      scene13 = false;
-      scene12 = false;
-      scene14 = true;
-    }
-
-  }
+}
 
   if (scene14) {
     //  bacgrounddd();
@@ -485,6 +504,7 @@ function currentScene1() {
 }
 
 function currentScene2() {
+  scene1 = false;
   console.log("currentScene2");
   image(blueScreen, 0, 0);
   textSize(45);
@@ -498,15 +518,22 @@ function currentScene2() {
 }
 
 function currentScene3() {
+  scene1 = false;
+  scene2 = false;
+  scene3 = true;
   image(blueScreen, 0, 0);
   textSize(45);
   fill(254, 255, 0);
   text("what to do?", 120, 730);
 
+
 }
 
 function currentScene4() { //initial scene after the story
-
+  scene1 = false;
+  scene2 = false;
+  scene3 = false;
+  scene4 = true;
   image(room_clean, 0, 0);
   image(sketchbook, 800, 370);
   console.log("currentScene4");
@@ -517,28 +544,42 @@ function currentScene4() { //initial scene after the story
   fill(0);
   text("To use your sketchbook, you need a pencil to draw on it. ", 50, 35);
 
+  //  pencill.position.x = mouseX;
+    //pencill.position.y = mouseY;
 
-  if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
-    rollover = true;
-  } else {
-    rollover = false;
+  if(pencill.overlap(sketchbook_Area)) {
+    currentScene5();
+    scene4 = false;
+    scene5 = true;
   }
+
+
+
+//  if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
+  //  rollover = true;
+//  } else {
+//    rollover = false;
+//  }
 
   // Adjust location if being dragged
-  if (dragging) {
-    x = mouseX + offsetX;
-    y = mouseY + offsetY;
-  }
-  image(pencil, x, y);
+  //if (dragging) {
+  //  x = mouseX + offsetX;
+  //  y = mouseY + offsetY;
+//  }
+
+
+     drawSprites();
+
+//  image(pencil, x, y);
 
   ///////// sketchbook /////////
 
 
-  if (mouseIsPressed && x > 800 && x < 970 &&
-    y > 370 && y < 480) {
-    currentScene5();
+//  if (mouseIsPressed && x > 800 && x < 970 &&
+  //  y > 370 && y < 480) {
+  //  currentScene5();
 
-  }
+//  }
 }
 
 
@@ -548,21 +589,20 @@ function currentScene5() { //SKETCHBOOK + PENCIL
   textSize(25);
   fill(0);
   text("Well, what to draw? Maybe go around ", 120, 690);
-  text("your room for some inpiration. ", 120, 750);
+  text("your room for some inspiration. ", 120, 750);
   image(icon, 1000, 800, 30, 30);
+
   if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
     mouseY > 750 && mouseY < 850) {
-    currentScene6();
-    scene5 = false;
-    scene6 = true;
+      //currentScene6();
+      scene5 = false;
+      scene6 = true;
 
   }
 }
 // EXPLORE THE ROOM
 function currentScene6() {
 
-  ///  image(completed,)
-  //currentScene13();
   console.log("currentScene6");
 
   image(room_hints, 0, 0);
@@ -580,7 +620,7 @@ function currentScene6() {
   }
   if (timer < 30) {
     // Form()
-    let t = map(timer, 0, x, 0, 600);
+    let t = map(timer, 0, 200, 0, 600);
     fill(255, 50, 50);
     image(purpleTime, 68, 850, t, 40)
     image(timeShow, 60, 840);
@@ -588,37 +628,34 @@ function currentScene6() {
 
   }
 
-
   if (puzzle.canPlay) {
-    image(imgUncheckedBox, 200, 850);
+    image(imgUncheckedBox, 200, 845);
   } else {
-    image(imgCheckedBox, 200, 850);
+    image(imgCheckedBox, 200, 845);
   }
 
   if (puzzle1.canPlay) {
-    image(imgUncheckedBox, 260, 850);
+    image(imgUncheckedBox, 260, 845);
   } else {
-    image(imgCheckedBox, 260, 850);
+    image(imgCheckedBox, 260, 845);
   }
 
   if (puzzle2.canPlay) {
-    image(imgUncheckedBox, 320, 850);
+    image(imgUncheckedBox, 320, 845);
   } else {
-    image(imgCheckedBox, 320, 850);
+    image(imgCheckedBox, 320, 845);
   }
   if (puzzle3.canPlay) {
-    image(imgUncheckedBox, 380, 850);
+    image(imgUncheckedBox, 380, 845);
   } else {
-    image(imgCheckedBox, 380, 850);
+    image(imgCheckedBox, 380, 845);
   }
 
   if (puzzle4.canPlay) {
-    image(imgUncheckedBox, 440, 850);
+    image(imgUncheckedBox, 440, 845);
   } else {
-    image(imgCheckedBox, 440, 850);
+    image(imgCheckedBox, 440, 845);
   }
-
-
 
   if (timer <= 0) {
     // Form()
@@ -627,11 +664,10 @@ function currentScene6() {
 
   }
 
-
   if (lockingCounter === 5) { // puzzlES ARE COMPLETED
     scene13 = false;
     scene6 = false;
-    noteScene = false;
+    noteScene = true;
     note();
   }
 
@@ -921,12 +957,14 @@ function currentScene12() {
 function note() { //
   scene12 = false;
   scene13 = false;
+  console.log("notescene");
 
   image(noteIsFound, 0, 0);
 
   textSize(25);
   fill(0);
-  text("You've found the motivation to create again! ", 60, 850);
+  text("You've found the motivation to create again! ", 60, 750);
+  text("You can now draw on your sketchbook. ", 60, 830);
   image(icon, 1000, 600, 30, 30);
   if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
     mouseY > 550 && mouseY < 750) {
@@ -934,6 +972,7 @@ function note() { //
     noteScene = false;
     scene12 = false;
     scene13 = true;
+    happySong.play();
   }
 
 
@@ -947,19 +986,18 @@ function currentScene13() { // scene after the darkness
 
   if (mouseIsPressed && mouseX > 800 && mouseX < 970 &&
     mouseY > 370 && mouseY < 480) {
+      sketchbook_Opens.goToFrame(sketchbook_Opens.getLastFrame());
+      animation(sketchbook_Opens, 870, 450);
+      //textSize(25);
+}
+
+if(sketchbook_Opens.goToFrame(sketchbook_Opens.getLastFrame())) {
     currentScene14();
     scene13 = false;
     scene14 = true;
   }
-}
-
-function bacgrounddd() {
-  image(sketchbook_page, 0, 0);
 
 }
-
-
-
 
 function currentScene14() { // sketchbook final scene
   console.log("currentScene14");
@@ -974,13 +1012,15 @@ function currentScene14() { // sketchbook final scene
   for (let i = 0; i < drawing.length; i++)
     ellipse(drawing[i * 2], drawing[i * 2 + 1], 10, 10);
 
-  if(mouseIsPressed) {
-    saveCanvas('myCanvas', 'jpg');
+    image(pinkRect, 1000, 800, 100, 30);
+    textSize(12);
+    fill(0);
+    text("Save Your Sketch ", 1000, 820);
+
+    if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
+      mouseY > 750 && mouseY < 850) {
+    saveCanvas('mySketch', 'jpg');
   }
-
-
-  //if (mouseIsPressed) {
-  ///  ellipse(mouseX, mouseY, 32, 32);
 }
 
 
@@ -1003,21 +1043,8 @@ function mousePressed() { /// dragging the trash + pencil ///
     puzzle4.mousePressed(mouseX, mouseY);
   }
 
-  //happySong.play();
-
-
-  //current_image = current_image + 1;
-  // Did I click on the rectangle?
-  if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
-    dragging = true;
-    // If so, keep track of relative location of click to corner of rectangle
-    offsetX = x - mouseX;
-    offsetY = y - mouseY;
-  }
-
-
   for (var i = 0; i < papers.length; i++) {
-    //checking to see if the mouse is over the box and turning it white if it is
+
     if (papers[i].paperover) {
       papers[i].locked = true;
       print("mouse is pressed")
@@ -1034,6 +1061,7 @@ function mousePressed() { /// dragging the trash + pencil ///
   }
   return false;
 }
+
 
 function mouseDragged() {
 
@@ -1055,7 +1083,6 @@ function mouseDragged() {
   }
 
 
-
   for (var i = 0; i < papers.length; i++) {
     if (papers[i].locked) {
       papers[i].xpos = mouseX - papers[i].xoffset;
@@ -1065,6 +1092,7 @@ function mouseDragged() {
     }
   }
 }
+
 
 function mouseReleased() {
 
@@ -1086,13 +1114,13 @@ function mouseReleased() {
     puzzle4.mouseReleased();
   }
 
-
   // Quit dragging
   for (var i = 0; i < papers.length; i++) {
     papers[i].locked = false;
   }
-  dragging = false;
+//  dragging = false;
 }
+
 
 function Paper(tempColor, tempSize) {
   this.c = tempColor //tint(random(0,255));
