@@ -15,8 +15,14 @@ mousepress
 4 -add more memories
 5 -credit the codes I used
 
+ credits:
+ Thanks to Ceren Kayalar for all the help !!
 
-last update: May 26, Thu
+   Puzzle: by Suki https://www.openprocessing.org/sketch/724032
+   Draaging the papers: by nlogler ---> https://forum.processing.org/two/discussion/19190/click-and-drag-with-arrays-of-objects
+   Dark Room : Brightness Example by Daniel Shiffman ---> https://p5js.org/examples/color-brightness.html
+
+last update: Jun 9, Tue
 
 */
 
@@ -130,12 +136,9 @@ function preload() {
   text_box = loadImage('assets/text_box.png');
   text_box_grey = loadImage('assets/text_box_grey.png');
   icon = loadImage('assets/icon.png');
-//  pencil = loadImage('assets/pencil.png');
   sketchbook_page = loadImage('assets/sketchbook_page.png');
   room_hints = loadImage('assets/room_hints.png');
   timeShow = loadImage('assets/time_ui.png');
-  //completed = loadImage('assets/completed.png');
-  //checkPuzzle = loadImage('assets/check_the_puzzles.png');
   imgCheckedBox = loadImage('assets/checkedBox.png');
   imgUncheckedBox = loadImage('assets/uncheckedBox.png');
 
@@ -281,7 +284,6 @@ function draw() {
     currentScene5();
     scene3 = false;
     scene4 = false;
-    image(icon, 1000, 800, 30, 30);
 
     if (mouseIsPressed && mouseX > 1000 && mouseX < 1050 &&
         mouseY > 800 && mouseY < 850) {
@@ -344,6 +346,11 @@ function draw() {
     bookMemory();
     scene7 = false;
     scene6 = false;
+    if (!puzzle1.canPlay) {
+      fill(0, 0, 0);
+      text("WELL DONE!", 10, height - 50);
+      noFill();
+    }
 
     if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
       mouseY > 750 && mouseY < 850) {
@@ -358,6 +365,11 @@ function draw() {
     plantMemory();
     scene7 = false;
     scene6 = false;
+    if (!puzzle3.canPlay) {
+      fill(0, 0, 0);
+      text("WELL DONE!", 10, height - 50);
+      noFill();
+    }
 
     if (mouseIsPressed && mouseX > 1000 && mouseX < 1050 &&
       mouseY > 750 && mouseY < 850) {
@@ -372,6 +384,11 @@ function draw() {
     smileyMemory();
     scene7 = false;
     scene6 = false;
+    if (!puzzle4.canPlay) {
+      fill(0, 0, 0);
+      text("WELL DONE!", 10, height - 50);
+      noFill();
+    }
 
     if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
       mouseY > 750 && mouseY < 850) {
@@ -387,7 +404,7 @@ function draw() {
     scene7 = false;
     scene6 = false;
     if (!puzzle2.canPlay) {
-      fill(255, 0, 0);
+      fill(0, 0, 0);
       text("WELL DONE!", 10, height - 50);
       noFill();
     }
@@ -404,7 +421,11 @@ function draw() {
     currentScene7();
     scene5 = false;
     scene6 = false;
-
+    if (!puzzle.canPlay) {
+      fill(0, 0, 0);
+      text("WELL DONE!", 10, height - 50);
+      noFill();
+    }
     if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
       mouseY > 750 && mouseY < 850) {
       scene7 = false;
@@ -590,10 +611,10 @@ function currentScene5() { //SKETCHBOOK + PENCIL
   fill(0);
   text("Well, what to draw? Maybe go around ", 120, 690);
   text("your room for some inspiration. ", 120, 750);
-  image(icon, 1000, 800, 30, 30);
+  image(icon, 1000, 700, 30, 30);
 
   if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
-    mouseY > 750 && mouseY < 850) {
+    mouseY > 650 && mouseY < 750) {
       //currentScene6();
       scene5 = false;
       scene6 = true;
@@ -718,7 +739,7 @@ function currentScene7() {
   image(bacc, 0, 0);
   puzzle.draw();
 
-  image(pinkRect, 1000, 800, 60, 30);
+  image(pinkRect, 989, 800, 80, 30);
   textSize(12);
   fill(0);
   text("Go Back ", 1000, 820);
@@ -738,7 +759,7 @@ function bookMemory() {
   image(bacc, 0, 0);
   puzzle1.draw();
 
-  image(pinkRect, 1000, 800, 60, 30);
+  image(pinkRect, 989, 800, 80, 30);
   textSize(12);
   fill(0);
   text("Go Back ", 1000, 820);
@@ -758,7 +779,7 @@ function smileyMemory() {
   image(bacc, 0, 0);
   puzzle4.draw();
 
-  image(pinkRect, 1000, 800, 60, 30);
+  image(pinkRect, 989, 800, 80, 30);
   textSize(12);
   fill(0);
   text("Go Back ", 1000, 820);
@@ -778,7 +799,7 @@ function drawingMemory() {
   image(bacc, 0, 0);
   puzzle2.draw();
 
-  image(pinkRect, 1000, 800, 60, 30);
+  image(pinkRect, 989, 800, 80, 30);
   textSize(12);
   fill(0);
   text("Go Back ", 1000, 820);
@@ -797,8 +818,8 @@ function plantMemory() {
   clear();
   image(bacc, 0, 0);
   puzzle3.draw();
-
-  image(pinkRect, 1000, 800, 60, 30);
+console.log(mouseX,mouseY);
+  image(pinkRect, 989, 800, 80, 30);
   textSize(12);
   fill(0);
   text("Go Back ", 1000, 820);
