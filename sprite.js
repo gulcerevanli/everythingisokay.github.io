@@ -101,6 +101,7 @@ var pinkRect;
 
 var pencill;
 var pencil;
+var pencilUcu;
 
 var sketchbook_Area;
 var draggedSprite;
@@ -161,7 +162,7 @@ function preload() {
 //  pencil = loadImage
   bacc = loadImage('assets/light_blue_background.png');
   pinkRect = loadImage('assets/rectangle_pink.png');
-
+  pencilUcu = loadImage('assets/pen_ucu.png');
   memoryOfBook = loadImage('assets/memory_of_book.png');
 
   panicRoom2 = loadImage('assets/roomMelts_25.png');
@@ -1043,8 +1044,8 @@ function sketchAnimation () {
     animation(sketchbook_Opens, 600, 450);
     textSize(25);
     //fill(0);
-    text("Start by clicking anywhere ", 60, 800);
-    text("Hover slowly to draw! ", 60, 850);
+    text("Start by clicking. ", 60, 700);
+    text("Hover slowly over the sketchbook to draw! ", 60, 750);
 
     image(icon, 1000, 600, 30, 30);
 
@@ -1065,7 +1066,7 @@ function sketchAnimation () {
 function currentScene14() { // sketchbook final scene
     aniscene = false;
   console.log("currentScene14");
-  console.log(drawing);
+  console.log(mouseX,mouseY);
 
 
   drawing.push(mouseX);
@@ -1075,16 +1076,16 @@ function currentScene14() { // sketchbook final scene
   noStroke();
 
   for (let i = 0; i < drawing.length; i++)
-    ellipse(drawing[i * 2], drawing[i * 2 + 1], 10, 10);
+    image(pencilUcu,drawing[i * 2], drawing[i * 2 + 1], 10, 10);
 
-    image(pinkRect, 1000, 800, 100, 30);
+    image(pinkRect, 980, 800, 180, 30);
     textSize(12);
     fill(0);
     text("Save Your Sketch ", 1000, 820);
 
     if (mouseIsPressed && mouseX > 900 && mouseX < 1050 &&
       mouseY > 750 && mouseY < 850) {
-    saveCanvas('mySketch', 'jpg');
+       saveCanvas('mySketch', 'jpg');
   }
 }
 
