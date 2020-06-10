@@ -70,6 +70,7 @@ var sceneSmiley = false;
 var sceneDrawing = false;
 var bacgroundd = false;
 var noteScene = false;
+var aniscene = false;
 
 var x, y; // Location and size OF THE PEN
 //var offsetX, offsetY;
@@ -99,6 +100,8 @@ var bacc;
 var pinkRect;
 
 var pencill;
+var pencil;
+
 var sketchbook_Area;
 var draggedSprite;
 
@@ -155,7 +158,7 @@ function preload() {
   memoryOfPlant = loadImage('assets/memory_of_plant.png');
   memoryOfSmiley = loadImage('assets/memory_of_smiley.png');
 
-
+//  pencil = loadImage
   bacc = loadImage('assets/light_blue_background.png');
   pinkRect = loadImage('assets/rectangle_pink.png');
 
@@ -174,7 +177,7 @@ function preload() {
   clock = loadAnimation('assets/roomMelts_1.png', 'assets/roomMelts_2.png', 'assets/roomMelts_3.png', 'assets/roomMelts_4.png', 'assets/roomMelts_5.png', 'assets/roomMelts_6.png', 'assets/roomMelts_7.png', 'assets/roomMelts_8.png', 'assets/roomMelts_9.png', 'assets/roomMelts_10.png', 'assets/roomMelts_11.png', 'assets/roomMelts_12.png', 'assets/roomMelts_13.png', 'assets/roomMelts_14.png', 'assets/roomMelts_15.png', 'assets/roomMelts_16.png', 'assets/roomMelts_17.png', 'assets/roomMelts_18.png', 'assets/roomMelts_19.png', 'assets/roomMelts_20.png', 'assets/roomMelts_21.png', 'assets/roomMelts_22.png');
   //sketchbook = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png', 'assets/sketchbook_4.png', 'assets/sketchbook_5.png',)
   memoryOfPhoto = loadAnimation('assets/1.png', 'assets/2.png', 'assets/3.png', 'assets/4.png', 'assets/5.png', 'assets/6.png');
-  sketchbook_Opens = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png', 'assets/sketchbook_4.png', 'assets/sketchbook_5.png');
+  sketchbook_Opens = loadAnimation ('assets/plswork_1.png', 'assets/plswork_2.png','assets/plswork_3.png', 'assets/plswork_4.png', 'assets/plswork_5.png','assets/plswork_6.png', 'assets/plswork_7.png','assets/plswork_8.png', 'assets/plswork_9.png', 'assets/plswork_10.png');
 }
 
 function setup() {
@@ -496,6 +499,22 @@ function draw() {
     scene13 = true;
 
 }
+if (aniscene) { // scene after the darkness
+  sketchAnimation();
+  scene12 = false;
+  scene11 = false;
+  scene13 = false;
+  aniscene = true;
+
+  if (mouseIsPressed && mouseX > 100 && mouseX < 130 &&
+    mouseY > 550 && mouseY < 750) {
+      currentScene14();
+      aniscene = false;
+      scene13 = false;
+      scene14 = true;
+
+}
+}
 
   if (scene14) {
     //  bacgrounddd();
@@ -646,6 +665,7 @@ function currentScene6() {
     image(purpleTime, 68, 850, t, 40)
     image(timeShow, 60, 840);
     timeShow.resize(105, 60);
+
 
   }
 
@@ -1007,22 +1027,46 @@ function currentScene13() { // scene after the darkness
 
   if (mouseIsPressed && mouseX > 800 && mouseX < 970 &&
     mouseY > 370 && mouseY < 480) {
-      sketchbook_Opens.goToFrame(sketchbook_Opens.getLastFrame());
-      animation(sketchbook_Opens, 870, 450);
+     sketchAnimation();
+     scene13 = false;
+     aniscene = true;
       //textSize(25);
 }
+}
 
-if(sketchbook_Opens.goToFrame(sketchbook_Opens.getLastFrame())) {
-    currentScene14();
-    scene13 = false;
-    scene14 = true;
-  }
+function sketchAnimation () {
+  scene13 = false;
 
+    console.log("ani");
+
+    sketchbook_Opens.goToFrame(sketchbook_Opens.getLastFrame());
+    animation(sketchbook_Opens, 600, 450);
+    textSize(25);
+    //fill(0);
+    text("Start by clicking anywhere ", 60, 800);
+    text("Hover slowly to draw! ", 60, 850);
+
+    image(icon, 1000, 600, 30, 30);
+
+    if (mouseIsPressed && mouseX > 900 && mouseX < 1030 &&
+      mouseY > 550 && mouseY < 750) {
+      currentScene14();
+      aniscene = false;
+      scene13 = false;
+      scene14 = true;
+}
+
+
+//  if(sketchbook_Opens.getLastFrame() {
+
+  //  }
 }
 
 function currentScene14() { // sketchbook final scene
+    aniscene = false;
   console.log("currentScene14");
   console.log(drawing);
+
 
   drawing.push(mouseX);
   drawing.push(mouseY);
