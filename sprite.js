@@ -22,8 +22,9 @@ mousepress
    Draaging the papers: by nlogler ---> https://forum.processing.org/two/discussion/19190/click-and-drag-with-arrays-of-objects
    Dark Room : Brightness Example by Daniel Shiffman ---> https://p5js.org/examples/color-brightness.html
 
-last update: Jun 9, Tue
+last update: Jun 10, Wed
 
+computer says YES
 */
 
 let drawing = [];
@@ -37,7 +38,7 @@ var noteSavesU;
 var room_hints;
 
 let timegoes;
-let timer = 30;
+let timer = 20;
 let lockingCounter = 0;
 
 let papers = [];
@@ -105,11 +106,12 @@ var pencilUcu;
 
 var sketchbook_Area;
 var draggedSprite;
+var sari;
 
 function preload() {
   x = 200;
   y = 760;
-  pencill =createSprite(x,y,110,65);
+  pencill =createSprite(x,y,150,70);
   pencill.addImage(loadImage('assets/pencil.png'));
   //pencill.mouseActive = true;
   pencill.setCollider ('rectangle',55,33,100,65 );
@@ -167,13 +169,15 @@ function preload() {
 
   panicRoom2 = loadImage('assets/roomMelts_25.png');
   panicRoom3 = loadImage('assets/roomMelts_26.png');
-  room_panic_mode = loadImage('assets/room_panic_mode.png')
-  noteSavesU = loadImage('assets/noten.png')
-  noteIsFound = loadImage('assets/noteRead.png')
+  room_panic_mode = loadImage('assets/room_panic_mode.png');
+  noteSavesU = loadImage('assets/noten.png');
+  noteIsFound = loadImage('assets/noteRead.png');
   //MUSICCC
   soundFormats('mp3', 'ogg');
   sadSong = loadSound('assets/bitsadinnit.mp3');
   happySong = loadSound('assets/itsokay.mp3');
+
+  sari = loadImage('assets/Artboard 1.png')
 
   clock = loadAnimation('assets/roomMelts_1.png', 'assets/roomMelts_2.png', 'assets/roomMelts_3.png', 'assets/roomMelts_4.png', 'assets/roomMelts_5.png', 'assets/roomMelts_6.png', 'assets/roomMelts_7.png', 'assets/roomMelts_8.png', 'assets/roomMelts_9.png', 'assets/roomMelts_10.png', 'assets/roomMelts_11.png', 'assets/roomMelts_12.png', 'assets/roomMelts_13.png', 'assets/roomMelts_14.png', 'assets/roomMelts_15.png', 'assets/roomMelts_16.png', 'assets/roomMelts_17.png', 'assets/roomMelts_18.png', 'assets/roomMelts_19.png', 'assets/roomMelts_20.png', 'assets/roomMelts_21.png', 'assets/roomMelts_22.png');
   //sketchbook = loadAnimation ('assets/sketchbook_1.png', 'assets/sketchbook_2.png','assets/sketchbook_3.png', 'assets/sketchbook_4.png', 'assets/sketchbook_5.png',)
@@ -184,7 +188,8 @@ function preload() {
 function setup() {
 
   let c = createCanvas(1200,900);
-  background(222, 255, 35);
+  image (sari,0,0);
+//  background(222, 255, 35);
   textFont(ocr);
 
   imgCheckedBox.resize(50, 50);
@@ -659,11 +664,11 @@ function currentScene6() {
   if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
     timer--;
   }
-  if (timer < 30) {
+  if (timer < 20) {
     // Form()
     let t = map(timer, 0, 200, 0, 600);
     fill(255, 50, 50);
-    image(purpleTime, 68, 850, t, 40)
+    image(purpleTime, 68, 850, t*2 - 30, 40)
     image(timeShow, 60, 840);
     timeShow.resize(105, 60);
 
@@ -720,13 +725,13 @@ function currentScene6() {
     scene6 = false;
     scene5 = false;
 
-  } else if (mouseIsPressed && mouseX > 56 && mouseX < 200 && //mouse is clicked on clock
-    mouseY > 30 && mouseY < 195) {
-    currentScene8();
-    scene7 = false;
-    scene6 = false;
-    scene5 = false;
-    scene8 = true;
+//  } else if (mouseIsPressed && mouseX > 56 && mouseX < 200 && //mouse is clicked on clock
+  //  mouseY > 30 && mouseY < 195) {
+  //  currentScene8();
+  //  scene7 = false;
+  //  scene6 = false;
+  //  scene5 = false;
+  //  scene8 = true;
 
   } else if (mouseIsPressed && mouseX > 200 && mouseX < 350 && //mouse is clicked on book
     mouseY > 740 && mouseY < 780) {
@@ -954,15 +959,9 @@ function currentScene12() {
       var g = room_panic_mode.pixels[loc + 1];
       var b = room_panic_mode.pixels[loc + 2];
 
-      // Calculate an amount to change brightness
-      // based on proximity to the mouse
       var distance = dist(x, y, mouseX, mouseY);
 
-      // The closer the pixel is to the mouse, the lower the value of "distance"
-      // We want closer pixels to be brighter, however, so we invert the value using map()
-      // Pixels with a distance greater than the lightRadius have a brightness of 0.0
-      // (or negative which is equivalent to 0 here)
-      // Pixels with a distance of 0 have a brightness of 1.0.
+
       var adjustBrightness = map(distance, 0, lightRadius, 1, 0);
       r *= adjustBrightness;
       g *= adjustBrightness;
